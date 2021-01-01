@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 6149545644777934484}
   - component: {fileID: 8327674644503664381}
   m_Layer: 5
-  m_Name: Seeds
+  m_Name: Seeds_Trees
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
