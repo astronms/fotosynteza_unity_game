@@ -10,6 +10,25 @@ public class MainGameUI : MonoBehaviour
     {
         SceneManager.LoadScene("_GAME_MENU_SCENE");
     }
+
+    public void SowSeed()
+    {
+        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
+        fieldMenu.SetActive(false);
+
+        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
+        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        var tmp = fieldName.Split('[', ']')[1].Split(';');
+        Vector3 fieldCoordinates = new Vector3(float.Parse(tmp[0]), float.Parse(tmp[1]), float.Parse(tmp[2]));
+
+        Debug.Log(fieldCoordinates);
+    }
+
+    public void ExitFieldMenu()
+    {
+        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
+        fieldMenu.SetActive(false);
+    }
 }
 
 
