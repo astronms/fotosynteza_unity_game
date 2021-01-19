@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
             playersNicks[numberOfPlayers] = nick.text;
             numberOfPlayers++;
         }
-        SceneManager.LoadScene("_MAIN_SCENE");
+
         _gameManager.startNewGame(numberOfPlayers, playersNicks);
     }
 
@@ -50,4 +50,5 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
 }

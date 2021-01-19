@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
 {
+    private MainGameUI _mainGameUI;
 
     // zbiór pól
     IEnumerable<Field> _fields;
@@ -27,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     public void startNewGame(int numberOfPlayers, string[] nicks)
     {
+        StartCoroutine(LoadMainGameScene()); //Load main game scene and get MainGameUI object.. Don't touch! 
 
         //Create players
         for (int i = 0; i < numberOfPlayers; i++)
@@ -38,6 +42,8 @@ public class GameManager : MonoBehaviour
         _currentPlayerId = 0;
 
         Debug.Log("New game has been started.");
+
+        //_mainGameUI.RefreshPanels();
     }
 
     public void FazePhotosynthesis(int position)
@@ -522,6 +528,17 @@ public class GameManager : MonoBehaviour
             _fieldsarray[field._vector.x, field._vector.y, field._vector.z] = field;
         }
 
+    }
+
+    IEnumerator LoadMainGameScene() //please don't touch this...
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync("_MAIN_SCENE");
+
+        while (!async.isDone)
+        {
+            yield return 0;
+        }
+        _mainGameUI = MainGameUI.Instance;
     }
 
 }

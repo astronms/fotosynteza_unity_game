@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MainGameUI : MonoBehaviour
 {
+    public static MainGameUI Instance { get; private set; }
     private GameManager _gameManager;
 
     void Start()
     {
-        DontDestroyOnLoad(transform.gameObject);
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
@@ -39,8 +39,23 @@ public class MainGameUI : MonoBehaviour
 
     public void RefreshPanels()
     {
+        GameObject tmp = GameObject.Find("/GameUI");
+        Debug.Log(tmp);
         Debug.Log("Refresh!");
     }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
 }
 
 
