@@ -1,13 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Player
+
+public enum PlayerType
 {
-    public enum PlayerType
-    {
-        RealPlayer,
-        Bot
-    }
+    RealPlayer,
+    Bot
 }
 
 

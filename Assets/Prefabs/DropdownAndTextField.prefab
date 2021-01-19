@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8870062324268209154}
   m_Layer: 5
-  m_Name: FirstPlayer
+  m_Name: DropdownAndTextField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -479,8 +479,6 @@ MonoBehaviour:
   m_Options:
     m_Options:
     - m_Text: Gracz
-      m_Image: {fileID: 0}
-    - m_Text: Bot
       m_Image: {fileID: 0}
     - m_Text: Brak
       m_Image: {fileID: 0}
@@ -1334,7 +1332,7 @@ PrefabInstance:
     - target: {fileID: 3932462211235525075, guid: 2c3a9a767e16e61458c6a25c0dcae53f,
         type: 3}
       propertyPath: m_Name
-      value: MenuTextInput
+      value: NickInput
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c3a9a767e16e61458c6a25c0dcae53f, type: 3}

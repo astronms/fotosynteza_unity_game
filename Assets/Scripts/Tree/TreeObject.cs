@@ -7,7 +7,7 @@ public class TreeObject : MonoBehaviour
     public TreeClr _treeColor { get; set; }
     public TreeLvl _treeLevel { get; set; }
 
-    public Player.Player _player { get; set; } // wskaźnik do gracza
+    public Player _player { get; set; } // wskaźnik do gracza
 
     public enum TreeClr
     {

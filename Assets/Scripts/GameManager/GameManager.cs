@@ -15,6 +15,31 @@ public class GameManager : MonoBehaviour
     Field[,,] _fieldsarray = new Field[6, 6, 6];
     // wartość pozycji słońca
     int _sunposition;
+
+    //players 
+    private List<Player> _players = new List<Player>();
+    private int _currentPlayerId; //refers to the player who is currently taking his turn
+
+    void Start()
+    {
+        DontDestroyOnLoad(transform.gameObject);
+    }
+
+    public void startNewGame(int numberOfPlayers, string[] nicks)
+    {
+
+        //Create players
+        for (int i = 0; i < numberOfPlayers; i++)
+        {
+            Player tmp = new Player(i, nicks[i], PlayerType.RealPlayer);
+            _players.Add(tmp);
+        }
+
+        _currentPlayerId = 0;
+
+        Debug.Log("New game has been started.");
+    }
+
     public void FazePhotosynthesis(int position)
     {
         switch (position)

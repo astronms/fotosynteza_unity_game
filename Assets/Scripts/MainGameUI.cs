@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainGameUI : MonoBehaviour
 {
+    private GameManager _gameManager;
+
+    void Start()
+    {
+        DontDestroyOnLoad(transform.gameObject);
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
 
     public void OpenMenu()
     {
@@ -28,6 +35,11 @@ public class MainGameUI : MonoBehaviour
     {
         GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
         fieldMenu.SetActive(false);
+    }
+
+    public void RefreshPanels()
+    {
+        Debug.Log("Refresh!");
     }
 }
 

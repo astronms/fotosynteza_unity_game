@@ -2,14 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class MainMenu : MonoBehaviour
 {
+    private GameManager _gameManager;
+
+    void Start()
+    {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
 
     public void NewGame()
     {
+        string[] playersNicks = new string[4];
+        int numberOfPlayers = 0;
+
+        for (int i = 0; i < 4; i++)
+        {
+            TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType").GetComponent<TMPro.TMP_Dropdown>();
+            if (dropdown.options[dropdown.value].text == "Brak")
+                break; 
+
+            TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").GetComponent<TMPro.TMP_InputField>();
+            if (nick.text.Length == 0)
+                return; //Tutaj dodaj Error message na UI
+
+            playersNicks[numberOfPlayers] = nick.text;
+            numberOfPlayers++;
+        }
         SceneManager.LoadScene("_MAIN_SCENE");
+        _gameManager.startNewGame(numberOfPlayers, playersNicks);
     }
 
     public void BackToGame()
