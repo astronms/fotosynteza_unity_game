@@ -20,6 +20,23 @@ public class Sun_Rotation : MonoBehaviour
         }
     }
 
+    public Sun_Rotation()
+    {
+        sun_position = 0;
+    }
+
+    public void Next_Sun_Position()
+    {
+        StartCoroutine(Rotate(Vector3.up, 60, 1.0f));
+        sun_position += 1;
+        if (sun_position > 5)
+        {
+            sun_position = 0;
+        }
+    }
+
+
+
     IEnumerator Rotate(Vector3 axis, float angle, float duration = 1.0f)
     {
         Quaternion from = transform.rotation;

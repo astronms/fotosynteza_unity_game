@@ -6,8 +6,17 @@ public class TreeObject : MonoBehaviour
 {
     public TreeClr _treeColor { get; set; }
     public TreeLvl _treeLevel { get; set; }
-
+    private Vector3Int _position { get; set; }
     public Player _player { get; set; } // wskaźnik do gracza
+
+    public TreeObject(TreeClr treecolor, TreeLvl treelevel, Vector3Int position, Player player)
+    {
+        _treeColor = treecolor;
+        _treeLevel = treelevel;
+        _position = position;
+        _player = player;
+    }
+
 
     public enum TreeClr
     {

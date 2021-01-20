@@ -17,7 +17,9 @@ public class GameManager : MonoBehaviour
     // tablica wyszukiwania pól 
     Field[,,] _fieldsarray = new Field[6, 6, 6];
     // wartość pozycji słońca
-    int _sunposition;
+    /*int _sunposition;*/
+    Sun_Rotation sun_Rotation = new Sun_Rotation();
+    private bool isEndOfRound = false;
 
     //players 
     private List<Player> _players = new List<Player>();
@@ -519,6 +521,46 @@ public class GameManager : MonoBehaviour
         }
         return pointoflightstoadd;
     }
+
+    public void LifeCyclePhase(Player player)
+    {
+        while (!isEndOfRound)
+        {
+            //sadzenie, wzrost, kupowanie
+        }
+        isEndOfRound = false;
+    }
+
+
+
+    public void FirstRound()
+    {
+        foreach (Player player in _players)
+        {
+            //zaznaczenie pola field
+            //field._assignment = new TreeObject(i, 1, field._vector, player);
+        }
+        for (int i = _players.Count; i >= 0; i--)
+        {
+            //zaznaczenie pola field
+            //field._assignment = new TreeObject(i, 1, field._vector, player);
+        }
+    }
+
+    public void Round()
+    {
+        FazePhotosynthesis(sun_Rotation.sun_position);
+        foreach(Player player in _players)
+        {
+            LifeCyclePhase(player);
+        }
+
+
+
+
+        sun_Rotation.Next_Sun_Position();
+    }
+
 
     // przypisywanie listy pól do tablicy wyszukiwania pól
     public void FillFieldArray()
