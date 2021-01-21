@@ -29,9 +29,9 @@ public class MainMenu : MonoBehaviour
             
             if (dropdown.options[dropdown.value].text == "Brak")
             {
-                nick.colors = new ColorBlock();
-                nick.readOnly = true;
                 nick.pointSize = 0.0f;
+                nick.readOnly = true;
+                nick.colors = new ColorBlock();
             }
             else
             {
