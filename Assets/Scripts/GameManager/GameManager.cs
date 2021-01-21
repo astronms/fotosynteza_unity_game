@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Collections;
-using Assets.Scripts.GameManager;
-using JetBrains.Annotations;
 using UnityEngine.SceneManagement;
 
 
