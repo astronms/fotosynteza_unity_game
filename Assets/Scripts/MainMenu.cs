@@ -1,19 +1,48 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using TMPro;
 
 
 public class MainMenu : MonoBehaviour
 {
     private GameManager _gameManager;
+    private ColorBlock _defaultColorBlockNick;
 
     void Start()
     {
+
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _defaultColorBlockNick = GameObject.Find("/Menu/NewGameMenu/Player_1/NickInput").GetComponent<TMPro.TMP_InputField>().colors;
     }
+
+    void OnGUI()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType").GetComponent<TMPro.TMP_Dropdown>();
+            TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").GetComponent<TMPro.TMP_InputField>();
+            
+            if (dropdown.options[dropdown.value].text == "Brak")
+            {
+                nick.colors = new ColorBlock();
+                nick.readOnly = true;
+                nick.pointSize = 0.0f;
+            }
+            else
+            {
+                nick.pointSize = 40.0f;
+                nick.readOnly = false;
+                nick.colors = _defaultColorBlockNick;
+            }
+        }
+
+    }
+
 
     public async void NewGame()
     {
