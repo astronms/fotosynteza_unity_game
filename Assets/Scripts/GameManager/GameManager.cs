@@ -584,5 +584,29 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private Field GetFieldByVector(Vector3Int vector)
+    {
+        foreach(Field field in _fields)
+        {
+            if (field._vector == vector)
+                return field;
+        }
+        return null; 
+    }
+
+    public int AvailableActionOnField(Vector3Int vector) //the better solution for returning available action? Enum? 
+    {
+        Field field = GetFieldByVector(vector);
+
+        if (field._assignment == null)
+        {
+            return 1; //seed 
+        }
+        else
+        {
+            return 0; //no action available 
+        }
+    }
+
 }
 

@@ -1,10 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class FieldClick : MonoBehaviour
 {
+
+    private GameManager _gameManager;
+
+    void Start()
+    {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
     private void OnMouseDown()
     {
         GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
@@ -15,18 +24,25 @@ public class FieldClick : MonoBehaviour
 
         if (name == "Cylinder" && !IsPointerOverUIElement())
         {
-            fieldMenu.SetActive(true);
-            fieldMenu.transform.position = mousePos + shift;
-            fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text = field.name;
+            var tmp = field.name.Split('[', ']')[1].Split(';');
+            Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+            int action = _gameManager.AvailableActionOnField(fieldCoordinates);
+
+            if(action > 0)
+            {
+                fieldMenu.SetActive(true);
+                fieldMenu.transform.position = mousePos + shift;
+                fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text = field.name;
+            }
         }
     }
 
-    public static bool IsPointerOverUIElement()
+    private static bool IsPointerOverUIElement()
     {
         return IsPointerOverUIElement(GetEventSystemRaycastResults());
     }
 
-    public static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    private static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
     {
         for (int index = 0; index < eventSystemRaysastResults.Count; index++)
         {
