@@ -605,14 +605,5 @@ public class GameManager : MonoBehaviour
             return actionType.none; //no action available 
         }
     }
-
-}
-
-public enum actionType
-{
-    none,
-    seed,
-    update,
-    cut
 }
 

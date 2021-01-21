@@ -36,7 +36,6 @@ public class Sun_Rotation : MonoBehaviour
     }
 
 
-
     IEnumerator Rotate(Vector3 axis, float angle, float duration = 1.0f)
     {
         Quaternion from = transform.rotation;
