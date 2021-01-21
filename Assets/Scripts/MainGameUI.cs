@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,15 +21,17 @@ public class MainGameUI : MonoBehaviour
         SceneManager.LoadScene("_GAME_MENU_SCENE");
     }
 
-    public void getListOfFieldsCoordinates()
+    public List<Vector3Int> getListOfFieldsCoordinates()
     {
+        List<Vector3Int> coordinatesList = new List<Vector3Int>();
         Transform boardTransform = GameObject.Find("Board").transform;
-        List<GameObject> Children = new List<GameObject>();
         foreach (Transform child in boardTransform)
         {
-            Children.Add(child.gameObject);
-            Debug.Log(child.name);
+            var tmp = child.name.Split('[', ']')[1].Split(';');
+            Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+            coordinatesList.Add(fieldCoordinates);
         }
+        return coordinatesList;
     }
 
     public void SowSeed()
@@ -39,7 +42,7 @@ public class MainGameUI : MonoBehaviour
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
         string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3 fieldCoordinates = new Vector3(float.Parse(tmp[0]), float.Parse(tmp[1]), float.Parse(tmp[2]));
+        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
 
         Debug.Log(fieldCoordinates);
     }

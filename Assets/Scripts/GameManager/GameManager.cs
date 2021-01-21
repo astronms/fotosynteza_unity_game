@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private MainGameUI _mainGameUI;
 
     // zbiór pól
-    IEnumerable<Field> _fields;
+    List<Field> _fields = new List<Field>();
     // tablica wyszukiwania pól 
     Field[,,] _fieldsarray = new Field[6, 6, 6];
     // wartość pozycji słońca
@@ -41,14 +41,21 @@ public class GameManager : MonoBehaviour
         }
 
         _currentPlayerId = 0;
-        
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
-
     }
 
     public void MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
     {
         _mainGameUI = MainGameUI.Instance;
+
+        //Generating _fields structure 
+        List<Vector3Int> fieldsCoordinates = _mainGameUI.getListOfFieldsCoordinates();
+        foreach(Vector3Int coordinate in fieldsCoordinates)
+        {
+            Field field = new Field();
+            field._vector = coordinate;
+            _fields.Add(field);
+        }
 
         Debug.Log("Other stuff...");
     }
