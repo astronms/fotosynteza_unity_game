@@ -30,16 +30,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);
     }
 
-    public void startNewGame(int numberOfPlayers, string[] nicks)
+    public void startNewGame(List<Player> players)
     {
-
-        //Create players
-        for (int i = 0; i < numberOfPlayers; i++)
-        {
-            Player tmp = new Player(i, nicks[i], PlayerType.RealPlayer);
-            _players.Add(tmp);
-        }
-
+        _players = players;
         _currentPlayerId = 0;
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
     }
