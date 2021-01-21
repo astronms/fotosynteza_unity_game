@@ -29,15 +29,11 @@ public class MainMenu : MonoBehaviour
             
             if (dropdown.options[dropdown.value].text == "Brak")
             {
-                nick.pointSize = 0.0f;
-                nick.readOnly = true;
-                nick.colors = new ColorBlock();
+                GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").SetActive(false);
             }
             else
             {
-                nick.pointSize = 40.0f;
-                nick.readOnly = false;
-                nick.colors = _defaultColorBlockNick;
+                GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").SetActive(true);
             }
         }
 
@@ -49,14 +45,19 @@ public class MainMenu : MonoBehaviour
         string[] playersNicks = new string[4];
         int numberOfPlayers = 0;
         await LoadMainGameScene(); //Load main game scene and get MainGameUI object.. Don't touch!
-
+        List<Player> players = new List<Player>();
         for (int i = 0; i < 4; i++)
         {
             TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType").GetComponent<TMPro.TMP_Dropdown>();
-            if (dropdown.options[dropdown.value].text == "Brak")
-                break; 
-
             TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").GetComponent<TMPro.TMP_InputField>();
+            if (dropdown.options[dropdown.value].text != "Brak")
+            {
+                //players.Add(Player(nick));
+                numberOfPlayers++;
+            }
+            
+
+            
             if (nick.text.Length == 0)
                 return; //Tutaj dodaj Error message na UI
 
