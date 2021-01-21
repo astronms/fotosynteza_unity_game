@@ -31,7 +31,6 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
-*.dll
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -48,5 +47,3 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-/MonoBleedingEdge
-/Fotosynteza 3D_Data
