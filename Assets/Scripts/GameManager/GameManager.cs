@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Collections;
+using Assets.Scripts.GameManager;
+using JetBrains.Annotations;
 using UnityEngine.SceneManagement;
 
 
@@ -594,19 +596,28 @@ public class GameManager : MonoBehaviour
         return null; 
     }
 
-    public int AvailableActionOnField(Vector3Int vector) //the better solution for returning available action? Enum? 
+
+    public actionType AvailableActionOnField(Vector3Int vector) //the better solution for returning available action? Enum? 
     {
         Field field = GetFieldByVector(vector);
 
         if (field._assignment == null)
         {
-            return 1; //seed 
+            return actionType.seed; //seed 
         }
         else
         {
-            return 0; //no action available 
+            return actionType.none; //no action available 
         }
     }
 
+}
+
+public enum actionType
+{
+    none,
+    seed,
+    update,
+    cut
 }
 

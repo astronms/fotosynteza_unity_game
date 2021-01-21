@@ -26,7 +26,7 @@ public class FieldClick : MonoBehaviour
         {
             var tmp = field.name.Split('[', ']')[1].Split(';');
             Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
-            int action = _gameManager.AvailableActionOnField(fieldCoordinates);
+            actionType action = _gameManager.AvailableActionOnField(fieldCoordinates);
 
             if(action > 0)
             {
