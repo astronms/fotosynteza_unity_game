@@ -29,11 +29,15 @@ public class MainMenu : MonoBehaviour
             
             if (dropdown.options[dropdown.value].text == "Brak")
             {
-                GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").SetActive(false);
+                nick.pointSize = 0.0f;
+                nick.readOnly = true;
+                nick.colors = new ColorBlock();
             }
             else
             {
-                GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").SetActive(true);
+                nick.pointSize = 40.0f;
+                nick.readOnly = false;
+                nick.colors = _defaultColorBlockNick;
             }
         }
 
