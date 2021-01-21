@@ -11,11 +11,24 @@ public class MainGameUI : MonoBehaviour
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        DontDestroyOnLoad(transform.gameObject);
+        _gameManager.MainGameUIIsLoaded();
     }
 
     public void OpenMenu()
     {
         SceneManager.LoadScene("_GAME_MENU_SCENE");
+    }
+
+    public void getListOfFieldsCoordinates()
+    {
+        Transform boardTransform = GameObject.Find("Board").transform;
+        List<GameObject> Children = new List<GameObject>();
+        foreach (Transform child in boardTransform)
+        {
+            Children.Add(child.gameObject);
+            Debug.Log(child.name);
+        }
     }
 
     public void SowSeed()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 
 public class MainMenu : MonoBehaviour
@@ -14,10 +15,11 @@ public class MainMenu : MonoBehaviour
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-    public void NewGame()
+    public async void NewGame()
     {
         string[] playersNicks = new string[4];
         int numberOfPlayers = 0;
+        await LoadMainGameScene(); //Load main game scene and get MainGameUI object.. Don't touch!
 
         for (int i = 0; i < 4; i++)
         {
@@ -51,4 +53,15 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    private async Task LoadMainGameScene() //please don't touch this...
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync("_MAIN_SCENE");
+
+        while (true)
+        {
+            if (async.progress >= 0.9f)
+                break;
+        }
+
+    }
 }
