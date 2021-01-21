@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);
     }
 
+    /// <summary>
+    /// method called when the main game starts
+    /// </summary>
+    /// <param name="players">List of active players</param>
     public void startNewGame(List<Player> players)
     {
         _players = players;

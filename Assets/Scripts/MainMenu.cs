@@ -11,18 +11,20 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
     private GameManager _gameManager;
-    private ColorBlock _defaultColorBlockNick;
 
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        _defaultColorBlockNick = GameObject.Find("/Menu/NewGameMenu/Player_1/NickInput").GetComponent<TMPro.TMP_InputField>().colors;
     }
 
+    /// <summary>
+    /// called when updating the GUI
+    /// </summary>
     void OnGUI()
     {
         if (this.ToString() == "NewGameMenu (MainMenu)")
         {
+            ColorBlock defaultColorBlockNick = GameObject.Find("/Menu/NewGameMenu/Player_1/NickInput").GetComponent<TMPro.TMP_InputField>().colors;
             for (int i = 0; i < 4; i++)
             {
                 TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType").GetComponent<TMPro.TMP_Dropdown>();
@@ -38,12 +40,10 @@ public class MainMenu : MonoBehaviour
                 {
                     nick.pointSize = 40.0f;
                     nick.readOnly = false;
-                    nick.colors = _defaultColorBlockNick;
+                    nick.colors = defaultColorBlockNick;
                 }
             }
         }
-
-
     }
 
 
