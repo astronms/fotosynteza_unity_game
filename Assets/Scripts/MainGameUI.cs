@@ -176,6 +176,62 @@ public class MainGameUI : MonoBehaviour
         _gameManager.EndPlayerTurn();
     }
 
+    public void BuySeed()
+    {
+        Player player = _gameManager._players[_gameManager._currentPlayerId];
+        if (player.PointOfLights > 0)
+        {
+            player.PointOfLights--;
+            player.NumberOfSeeds++;
+        }
+        else
+        {
+            //warning! 
+        }
+
+    }
+    public void BuySmallTree()
+    {
+        Player player = _gameManager._players[_gameManager._currentPlayerId];
+        if (player.PointOfLights >= 2)
+        {
+            player.PointOfLights -= 2;
+            player.NumberOfSmallTrees++;
+        }
+        else
+        {
+            //warning! 
+        }
+    }
+    public void BuyMediumTree()
+    {
+        Player player = _gameManager._players[_gameManager._currentPlayerId];
+        if (player.PointOfLights >= 3)
+        {
+            player.PointOfLights -= 3;
+            player.NumberOfMediumTrees++;
+        }
+        else
+        {
+            //warning! 
+        }
+
+    }
+    public void BuyBigTree()
+    {
+        Player player = _gameManager._players[_gameManager._currentPlayerId];
+        if (player.PointOfLights >= 4)
+        {
+            player.PointOfLights -= 4;
+            player.NumberOfLargeTrees++;
+        }
+        else
+        {
+            //warning! 
+        }
+
+    }
+
     public void Update() //variables for UI handling. method runs constantly 1/frame, refrashing variable values
     {
         //general UI. visible for all players all the time. score board- player names, points, round number
