@@ -79,14 +79,19 @@ public class MainGameUI : MonoBehaviour
         //general UI. visible for all players all the time. score board- player names, points, round number
      
         name1_ui.text = _gameManager._players[0].Nick;
-        name2_ui.text = _gameManager._players[1].Nick.ToString();
-        name3_ui.text = _gameManager._players[2].Nick.ToString();
-        name4_ui.text = _gameManager._players[3].Nick.ToString();
-
+        name2_ui.text = _gameManager._players[1].Nick;
         player1_ui_points.text = _gameManager._players[0].Points.ToString() + " pkt";
         player2_ui_points.text = _gameManager._players[1].Points.ToString() + " pkt";
-        player3_ui_points.text = _gameManager._players[2].Points.ToString() + " pkt";
-        player4_ui_points.text = _gameManager._players[3].Points.ToString() + " pkt";
+        if (_gameManager._players.Count > 2)
+        {
+            name3_ui.text = _gameManager._players[2].Nick;
+            player3_ui_points.text = _gameManager._players[2].Points.ToString() + " pkt";
+        }
+        if (_gameManager._players.Count > 3)
+        {
+            name4_ui.text = _gameManager._players[3].Nick.ToString();
+            player4_ui_points.text = _gameManager._players[3].Points.ToString() + " pkt";
+        }
 
         //round_count.text = "Runda #" + COŚ.CO.LICZY.LICZBE.TUR.ToString();;
 
