@@ -12,10 +12,21 @@ public class MainMenu : MonoBehaviour
 {
     private GameManager _gameManager;
     private ColorBlock _defaultColorBlockNick;
+
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        _defaultColorBlockNick = FindObjectOfType<TMPro.TMP_InputField>().colors;
+        if (this.ToString() == "NewGameMenu (MainMenu)")
+        {
+            try
+            {
+                _defaultColorBlockNick = FindObjectOfType<TMPro.TMP_InputField>().colors;
+            }
+            catch (NullReferenceException ex)
+            {
+                Debug.Log("Not loaded _defaultColorBlockNick");
+            }
+        }
     }
 
     /// <summary>
@@ -27,8 +38,10 @@ public class MainMenu : MonoBehaviour
         {
             for (int i = 0; i < 4; i++)
             {
-                TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType").GetComponent<TMPro.TMP_Dropdown>();
-                TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").GetComponent<TMPro.TMP_InputField>();
+                TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
+                    .GetComponent<TMPro.TMP_Dropdown>();
+                TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
+                    .GetComponent<TMPro.TMP_InputField>();
 
                 if (dropdown.options[dropdown.value].text == "Brak")
                 {
@@ -49,14 +62,15 @@ public class MainMenu : MonoBehaviour
 
     public async void NewGame()
     {
-        string[] playersNicks = new string[4];
+        SceneManager.LoadSceneAsync("_MAIN_SCENE");
         int playerNumber = 0;
-        await LoadMainGameScene(); //Load main game scene and get MainGameUI object.. Don't touch!
         List<Player> players = new List<Player>();
         for (int i = 0; i < 4; i++)
         {
-            TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType").GetComponent<TMPro.TMP_Dropdown>();
-            TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput").GetComponent<TMPro.TMP_InputField>();
+            TMPro.TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
+                .GetComponent<TMPro.TMP_Dropdown>();
+            TMPro.TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
+                .GetComponent<TMPro.TMP_InputField>();
             if (dropdown.options[dropdown.value].text != "Brak")
             {
                 if (nick.text.Length == 0)
@@ -77,23 +91,12 @@ public class MainMenu : MonoBehaviour
 
     public void OpenTutorial()
     {
-        System.Diagnostics.Process.Start("https://portalgames.blob.core.windows.net/fotosynteza/Fotosynteza-Instrukcja.pdf");
+        Application.OpenURL("https://portalgames.blob.core.windows.net/fotosynteza/Fotosynteza-Instrukcja.pdf");
     }
 
     public void QuitGame()
     {
         Application.Quit();
     }
-
-    private async Task LoadMainGameScene() //please don't touch this...
-    {
-        AsyncOperation async = SceneManager.LoadSceneAsync("_MAIN_SCENE");
-
-        while (true)
-        {
-            if (async.progress >= 0.9f)
-                break;
-        }
-
-    }
 }
+
