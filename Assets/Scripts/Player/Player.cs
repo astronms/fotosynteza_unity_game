@@ -8,7 +8,7 @@ public class Player
     public PlayerType PlayerType { get; set; }
     public string Nick { get; set; }
     public int Points { get; set; }
-    public int PointOfLIghts { get; set; }
+    public int PointOfLights { get; set; }
     public int NumberOfSeeds { get; set; }
     public int NumberOfSmallTrees { get; set; }
     public int NumberOfMediumTrees { get; set; }
@@ -19,7 +19,7 @@ public class Player
         Nick = nick;
         PlayerType = playerType;
         Points = 0;
-        PointOfLIghts = 0;
+        PointOfLights = 100;
         NumberOfSeeds = 2;
         NumberOfSmallTrees = 4;
         NumberOfMediumTrees = 1;

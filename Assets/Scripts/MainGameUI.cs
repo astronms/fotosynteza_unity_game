@@ -201,7 +201,7 @@ public class MainGameUI : MonoBehaviour
 
         int currentPlayer = _gameManager._currentPlayerId;
         playername_ui.text = _gameManager._players[currentPlayer].Nick.ToString();
-        sun_points.text = _gameManager._players[currentPlayer].PointOfLIghts.ToString();
+        sun_points.text = _gameManager._players[currentPlayer].PointOfLights.ToString();
         seeds_count.text = _gameManager._players[currentPlayer].NumberOfSeeds.ToString();
         strees_count.text = _gameManager._players[currentPlayer].NumberOfSmallTrees.ToString();
         mtrees_count.text = _gameManager._players[currentPlayer].NumberOfMediumTrees.ToString();
