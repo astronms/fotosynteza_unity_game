@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     // wartość pozycji słońca
     /*int _sunposition;*/
     Sun_Rotation sun_Rotation;
-    private bool isEndOfRound = false;
+    public int _round = 1;
 
     //players 
     public List<Player> _players = new List<Player>();
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
         //Generating _fields structure 
         List<Vector3Int> fieldsCoordinates = _mainGameUI.getListOfFieldsCoordinates();
-        foreach(Vector3Int coordinate in fieldsCoordinates)
+        foreach (Vector3Int coordinate in fieldsCoordinates)
         {
             Field field = new Field();
             field._vector = coordinate;
@@ -73,32 +73,33 @@ public class GameManager : MonoBehaviour
                     int pointoflightstoadd = 0; // ustawić na poziom drzewa
 
                     // weryfikacja czy na polu ustawione jest drzewo
-                    if (field._assignment != null || field._assignment._treeLevel != TreeObject.TreeLvl.SEED) // 
+                    if (field._assignment != null) // 
                     {
-                        // ustawianie bazowych punktów światła do uzyskania dla sprawdzanego drzewa
-                        pointoflightstoadd = SetTreeValue(field);
-                        // sprawdzanie odległości do dystansu 3 pól przed drzewem
-                        for (int distance = 0; distance < 3; distance++)
+                        if (field._assignment._treeLevel != TreeObject.TreeLvl.SEED)
                         {
-                            x--;
-                            y++;
-                            // weryfikacja czy pole istnieje
-                            if ((x < 0 || y < 0 || z < 0) || (x > 6 || y > 6 || z > 6))
+                            // ustawianie bazowych punktów światła do uzyskania dla sprawdzanego drzewa
+                            pointoflightstoadd = SetTreeValue(field);
+                            // sprawdzanie odległości do dystansu 3 pól przed drzewem
+                            for (int distance = 0; distance < 3; distance++)
                             {
-                                break;
-                            }
-                            else
-                            {
-                                // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
-                                pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
+                                x--;
+                                y++;
+                                // weryfikacja czy pole istnieje
+                                if ((x < 0 || y < 0 || z < 0) || (x > 6 || y > 6 || z > 6))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
+                                    pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
 
+                                }
                             }
 
+                            // dodanie graczowi odpowieniej ilości punktów za dane drzewo
+                            field._assignment._player.PointOfLIghts += pointoflightstoadd;
                         }
-
-                        // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                        field._assignment._player.PointOfLIghts += pointoflightstoadd;
-
                     }
 
                 }
@@ -532,46 +533,6 @@ public class GameManager : MonoBehaviour
         return pointoflightstoadd;
     }
 
-    public void LifeCyclePhase(Player player)
-    {
-        while (!isEndOfRound)
-        {
-            //sadzenie, wzrost, kupowanie
-        }
-        isEndOfRound = false;
-    }
-
-
-
-    public void FirstRound()
-    {
-        foreach (Player player in _players)
-        {
-            //zaznaczenie pola field
-            //field._assignment = new TreeObject(i, 1, field._vector, player);
-        }
-        for (int i = _players.Count; i >= 0; i--)
-        {
-            //zaznaczenie pola field
-            //field._assignment = new TreeObject(i, 1, field._vector, player);
-        }
-    }
-
-    public void Round()
-    {
-        FazePhotosynthesis(sun_Rotation.sun_position);
-        foreach(Player player in _players)
-        {
-            LifeCyclePhase(player);
-        }
-
-
-
-
-        sun_Rotation.Next_Sun_Position();
-    }
-
-
     // przypisywanie listy pól do tablicy wyszukiwania pól
     public void FillFieldArray()
     {
@@ -584,22 +545,43 @@ public class GameManager : MonoBehaviour
 
     private Field GetFieldByVector(Vector3Int vector)
     {
-        foreach(Field field in _fields)
+        foreach (Field field in _fields)
         {
             if (field._vector == vector)
                 return field;
         }
-        return null; 
+        return null;
+    }
+
+    private int GetFieldLevel(Field field)
+    {
+        Vector3Int position = field._vector;
+        if (position.x == 0 || position.x == 6 || position.y == 0 || position.y == 6 || position.z == 0 || position.z == 6)
+            return 1;
+        else
+            return 2;
     }
 
 
     public actionType AvailableActionOnField(Vector3Int vector) //the better solution for returning available action? Enum? 
     {
         Field field = GetFieldByVector(vector);
+        if (field._already_used == true)
+            return actionType.none;
 
         if (field._assignment == null)
         {
-            return actionType.seed; //seed 
+            if (_round == 1)
+            {
+                if (_players[_currentPlayerId].NumberOfSmallTrees > 2 && GetFieldLevel(field) == 1)
+                    return actionType.plant;
+                else
+                    return actionType.none;
+            }
+            else
+            {
+                return actionType.seed;
+            }
         }
         else
         {
@@ -620,6 +602,22 @@ public class GameManager : MonoBehaviour
 
         TreeObject seed = new TreeObject(TreeObject.TreeLvl.SEED, _players[_currentPlayerId]);
         field._assignment = seed;
+        field._already_used = true;
+        _players[_currentPlayerId].NumberOfSeeds--;
+        return true;
+    }
+
+    public bool PlantTree(Vector3Int coordinates)
+    {
+        Field field = GetFieldByVector(coordinates);
+
+        if (field._assignment != null)
+            return false;
+
+        TreeObject tree = new TreeObject(TreeObject.TreeLvl.SMALL, _players[_currentPlayerId]);
+        field._assignment = tree;
+        _players[_currentPlayerId].NumberOfSmallTrees--;
+        field._already_used = true;
         return true;
     }
 
@@ -628,15 +626,49 @@ public class GameManager : MonoBehaviour
         Field field = GetFieldByVector(coordinates);
 
         field._assignment.lvlUp();
+        field._already_used = true;
 
+        switch(field._assignment._treeLevel)
+        {
+            case TreeObject.TreeLvl.SMALL:
+                _players[_currentPlayerId].NumberOfSmallTrees--;
+                break;
+            case TreeObject.TreeLvl.MID:
+                _players[_currentPlayerId].NumberOfMediumTrees--;
+                break;
+            case TreeObject.TreeLvl.BIG:
+                _players[_currentPlayerId].NumberOfLargeTrees--;
+                break;
+        }
         return field._assignment._treeLevel;
     }
 
     public void CutTree(Vector3Int coordinates)
     {
         Field field = GetFieldByVector(coordinates);
+        field._already_used = true;
 
         field._assignment = null;
+    }
+
+    public void NextRound()
+    {
+        FazePhotosynthesis(sun_Rotation.sun_position);
+        sun_Rotation.Next_Sun_Position();
+        _round++;
+        foreach (var field in _fields)
+            field._already_used = false;
+    }
+
+    public void EndPlayerTurn()
+    {
+        if ((_currentPlayerId + 1) < _players.Count)
+            _currentPlayerId++;
+        else
+        {
+            NextRound();
+            _currentPlayerId = 0;
+        }
     }
 }
 

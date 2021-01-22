@@ -14,4 +14,6 @@ class Field
 
     public TreeObject _assignment { get; set; } //wskaźnik do umiejscowionego drzewa
 
+    public bool _already_used { get; set; }
+
 }

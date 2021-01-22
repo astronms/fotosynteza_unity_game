@@ -22,7 +22,7 @@ public class MainGameUI : MonoBehaviour
     public Text player3_ui_points;
     public Text player4_ui_points;
 
-    //public Text round_count;
+    public Text round_count;
 
     public Text playername_ui;
     public Text sun_points;
@@ -73,6 +73,32 @@ public class MainGameUI : MonoBehaviour
         {
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
             GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+            GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
+            newSeed.transform.parent = _treesGroup.transform;
+            newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
+        }
+        else
+        {
+            Debug.Log("Error during sowing seed.");
+        }
+    }
+
+    public void PlantTree() //this method shoud be called only in first game round
+    {
+        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
+        fieldMenu.SetActive(false);
+
+        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
+        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        var tmp = fieldName.Split('[', ']')[1].Split(';');
+        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+
+        bool result = _gameManager.PlantTree(fieldCoordinates);
+
+        if (result)
+        {
+            GameObject clickedField = GameObject.Find("/Board/" + fieldName);
+            GameObject tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
             GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
             newSeed.transform.parent = _treesGroup.transform;
             newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
@@ -145,6 +171,11 @@ public class MainGameUI : MonoBehaviour
         fieldMenu.SetActive(false);
     }
 
+    public void EndPlayerTurn()
+    {
+        _gameManager.EndPlayerTurn();
+    }
+
     public void Update() //variables for UI handling. method runs constantly 1/frame, refrashing variable values
     {
         //general UI. visible for all players all the time. score board- player names, points, round number
@@ -164,7 +195,7 @@ public class MainGameUI : MonoBehaviour
             player4_ui_points.text = _gameManager._players[3].Points.ToString() + " pkt";
         }
 
-        //round_count.text = "Runda #" + COŚ.CO.LICZY.LICZBE.TUR.ToString();;
+        round_count.text = "Runda #" + _gameManager._round.ToString();;
 
         //individual UI. _currentPlayerId needed for if's to work. case for player 0 working only.
 
@@ -174,7 +205,7 @@ public class MainGameUI : MonoBehaviour
         seeds_count.text = _gameManager._players[currentPlayer].NumberOfSeeds.ToString();
         strees_count.text = _gameManager._players[currentPlayer].NumberOfSmallTrees.ToString();
         mtrees_count.text = _gameManager._players[currentPlayer].NumberOfMediumTrees.ToString();
-        ltrees_count.text = _gameManager._players[currentPlayer].NumberOfLArgeTrees.ToString();
+        ltrees_count.text = _gameManager._players[currentPlayer].NumberOfLargeTrees.ToString();
     }
 
     private void Awake()
