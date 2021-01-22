@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     private bool isEndOfRound = false;
 
     //players 
-    private List<Player> _players = new List<Player>();
-    private int _currentPlayerId; //refers to the player who is currently taking his turn
+    public List<Player> _players = new List<Player>();
+    public int _currentPlayerId; //refers to the player who is currently taking his turn
 
     void Start()
     {
