@@ -62,6 +62,11 @@ public class MainMenu : MonoBehaviour
 
     public async void NewGame()
     {
+        if(MainGameUI.Instance != null)
+        {
+            GameObject GameUI = GameObject.Find("GameUI");
+            Destroy(GameUI);
+        }
         SceneManager.LoadSceneAsync("_MAIN_SCENE");
         int playerNumber = 0;
         List<Player> players = new List<Player>();

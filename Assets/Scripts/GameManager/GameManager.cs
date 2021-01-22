@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public void startNewGame(List<Player> players)
     {
         _players = players;
+        _fields = new List<Field>();
         _currentPlayerId = 0;
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
     }
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
     {
         _mainGameUI = MainGameUI.Instance;
 
+        //Removing all existing trees on UI
+        UITree.Instance.removeAllTrees();
         //Generating _fields structure 
         List<Vector3Int> fieldsCoordinates = _mainGameUI.getListOfFieldsCoordinates();
         foreach (Vector3Int coordinate in fieldsCoordinates)

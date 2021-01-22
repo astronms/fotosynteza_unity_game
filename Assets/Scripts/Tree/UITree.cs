@@ -24,4 +24,14 @@ public class UITree : MonoBehaviour
             Instance = this;
         }
     }
+
+    public void removeAllTrees()
+    {
+        GameObject Trees = GameObject.Find("/Trees");
+        int childs = Trees.transform.childCount;
+        for (int i = childs - 1; i >= 0; i--)
+        {
+            GameObject.DestroyImmediate(Trees.transform.GetChild(i).gameObject);
+        }
+    }
 }
