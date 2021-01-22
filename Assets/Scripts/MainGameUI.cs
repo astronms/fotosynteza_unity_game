@@ -9,6 +9,7 @@ public class MainGameUI : MonoBehaviour
 {
     public static MainGameUI Instance { get; private set; }
     private GameManager _gameManager;
+    private GameObject _treesGroup;
 
     [Header("UI variables")]
 
@@ -35,6 +36,7 @@ public class MainGameUI : MonoBehaviour
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         DontDestroyOnLoad(transform.gameObject);
         _gameManager.MainGameUIIsLoaded();
+        _treesGroup = GameObject.Find("Trees");
     }
 
     public void OpenMenu()
@@ -65,7 +67,76 @@ public class MainGameUI : MonoBehaviour
         var tmp = fieldName.Split('[', ']')[1].Split(';');
         Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
 
-        Debug.Log(fieldCoordinates);
+        bool result = _gameManager.AddSeed(fieldCoordinates);
+
+        if (result)
+        {
+            GameObject clickedField = GameObject.Find("/Board/" + fieldName);
+            GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+            GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
+            newSeed.transform.parent = _treesGroup.transform;
+            newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
+        }
+        else
+        {
+            Debug.Log("Error during sowing seed.");
+        }
+    }
+
+    public void UpgradeTree()
+    {
+        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
+        fieldMenu.SetActive(false);
+
+        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
+        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        var tmp = fieldName.Split('[', ']')[1].Split(';');
+        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+
+        GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
+        Destroy(existingTree);
+
+        TreeObject.TreeLvl lvl = _gameManager.UpgradeTree(fieldCoordinates);
+        GameObject clickedField = GameObject.Find("/Board/" + fieldName);
+        GameObject tree;
+        GameObject tmps;
+        switch (lvl)
+        {
+            case TreeObject.TreeLvl.SMALL:
+                tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+                tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
+                tree.transform.parent = _treesGroup.transform;
+                tree.transform.name = "Tree_" + fieldName.Split('_')[1];
+                break;
+            case TreeObject.TreeLvl.MID:
+                tmps = Resources.Load("MediumTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+                tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
+                tree.transform.parent = _treesGroup.transform;
+                tree.transform.name = "Tree_" + fieldName.Split('_')[1];
+                break;
+            case TreeObject.TreeLvl.BIG:
+                tmps = Resources.Load("BigTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+                tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
+                tree.transform.parent = _treesGroup.transform;
+                tree.transform.name = "Tree_" + fieldName.Split('_')[1];
+                break;
+        }
+    }
+
+    public void CutTree()
+    {
+        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
+        fieldMenu.SetActive(false);
+
+        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
+        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        var tmp = fieldName.Split('[', ']')[1].Split(';');
+        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+
+        GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
+        Destroy(existingTree);
+
+        _gameManager.CutTree(fieldCoordinates);
     }
 
     public void ExitFieldMenu()

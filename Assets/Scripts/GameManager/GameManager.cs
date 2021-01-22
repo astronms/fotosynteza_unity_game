@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     Field[,,] _fieldsarray = new Field[6, 6, 6];
     // wartość pozycji słońca
     /*int _sunposition;*/
-    Sun_Rotation sun_Rotation = new Sun_Rotation();
+    Sun_Rotation sun_Rotation;
     private bool isEndOfRound = false;
 
     //players 
@@ -54,7 +54,8 @@ public class GameManager : MonoBehaviour
             _fields.Add(field);
         }
 
-        Debug.Log("Other stuff...");
+        //Getting sun_Rotation object
+        sun_Rotation = GameObject.Find("sun").GetComponent<Sun_Rotation>();
     }
 
     public void FazePhotosynthesis(int position)
@@ -602,8 +603,40 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            return actionType.none; //no action available 
+            if (field._assignment._player == _players[_currentPlayerId] && field._assignment._treeLevel < TreeObject.TreeLvl.BIG)
+                return actionType.upgrade;
+            else if (field._assignment._player == _players[_currentPlayerId] && field._assignment._treeLevel == TreeObject.TreeLvl.BIG)
+                return actionType.cut;
         }
+        return actionType.none;
+    }
+
+    public bool AddSeed(Vector3Int coordinates)
+    {
+        Field field = GetFieldByVector(coordinates);
+
+        if (field._assignment != null)
+            return false;
+
+        TreeObject seed = new TreeObject(TreeObject.TreeLvl.SEED, _players[_currentPlayerId]);
+        field._assignment = seed;
+        return true;
+    }
+
+    public TreeObject.TreeLvl UpgradeTree(Vector3Int coordinates)
+    {
+        Field field = GetFieldByVector(coordinates);
+
+        field._assignment.lvlUp();
+
+        return field._assignment._treeLevel;
+    }
+
+    public void CutTree(Vector3Int coordinates)
+    {
+        Field field = GetFieldByVector(coordinates);
+
+        field._assignment = null;
     }
 }
 

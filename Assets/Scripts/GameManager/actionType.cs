@@ -2,7 +2,7 @@
 {
     none,
     seed,
-    update,
+    upgrade,
     cut
 }
 

@@ -28,11 +28,30 @@ public class FieldClick : MonoBehaviour
             Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
             actionType action = _gameManager.AvailableActionOnField(fieldCoordinates);
 
-            if(action > 0)
+            GameObject updateButton = GameObject.Find("/GameUI/FieldMenu/Panel/UpgradeTreeButton");
+            GameObject cutButton = GameObject.Find("/GameUI/FieldMenu/Panel/CutTreeButton");
+            GameObject seedButton = GameObject.Find("/GameUI/FieldMenu/Panel/SowSeedButton");
+
+            updateButton.SetActive(false);
+            seedButton.SetActive(false);
+            cutButton.SetActive(false);
+            if (action > 0)
             {
                 fieldMenu.SetActive(true);
                 fieldMenu.transform.position = mousePos + shift;
                 fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text = field.name;
+                switch (action)
+                {
+                    case actionType.seed:
+                        seedButton.SetActive(true);
+                        break;
+                    case actionType.upgrade:
+                        updateButton.SetActive(true);
+                        break;
+                    case actionType.cut:
+                        cutButton.SetActive(true);
+                        break;
+                }
             }
         }
     }
