@@ -179,84 +179,54 @@ public class MainGameUI : MonoBehaviour
     public void BuySeed()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
-        if (player.PointOfLights > 0)
-        {
-            player.PointOfLights--;
-            player.NumberOfSeeds++;
-        }
-        else
-        {
-            //warning! 
-        }
-
+        if (player.ChangePointOfLights(-1))
+            player.ChangeNumberOfSeeds(1);
     }
     public void BuySmallTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
-        if (player.PointOfLights >= 2)
-        {
-            player.PointOfLights -= 2;
-            player.NumberOfSmallTrees++;
-        }
-        else
-        {
-            //warning! 
-        }
+        if (player.ChangePointOfLights(-2))
+            player.ChangeNumberOfSmallTrees(1);
     }
     public void BuyMediumTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
-        if (player.PointOfLights >= 3)
-        {
-            player.PointOfLights -= 3;
-            player.NumberOfMediumTrees++;
-        }
-        else
-        {
-            //warning! 
-        }
-
+        if (player.ChangePointOfLights(-3))
+            player.ChangeNumberOfMediumTrees(1);
     }
     public void BuyBigTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
-        if (player.PointOfLights >= 4)
-        {
-            player.PointOfLights -= 4;
-            player.NumberOfLargeTrees++;
-        }
-        else
-        {
-            //warning! 
-        }
+        if (player.ChangePointOfLights(-4))
+            player.ChangeNumberOfLargeTrees(1);
 
     }
 
     public void Update() //variables for UI handling. method runs constantly 1/frame, refrashing variable values
     {
         //general UI. visible for all players all the time. score board- player names, points, round number
-     
+
         name1_ui.text = _gameManager._players[0].Nick;
         name2_ui.text = _gameManager._players[1].Nick;
-        player1_ui_points.text = _gameManager._players[0].Points.ToString() + " pkt";
-        player2_ui_points.text = _gameManager._players[1].Points.ToString() + " pkt";
+        player1_ui_points.text = _gameManager._players[0].Points + " pkt";
+        player2_ui_points.text = _gameManager._players[1].Points + " pkt";
         if (_gameManager._players.Count > 2)
         {
             name3_ui.text = _gameManager._players[2].Nick;
-            player3_ui_points.text = _gameManager._players[2].Points.ToString() + " pkt";
+            player3_ui_points.text = _gameManager._players[2].Points + " pkt";
         }
         if (_gameManager._players.Count > 3)
         {
-            name4_ui.text = _gameManager._players[3].Nick.ToString();
-            player4_ui_points.text = _gameManager._players[3].Points.ToString() + " pkt";
+            name4_ui.text = _gameManager._players[3].Nick;
+            player4_ui_points.text = _gameManager._players[3].Points + " pkt";
         }
 
-        round_count.text = "Runda #" + _gameManager._round.ToString();;
+        round_count.text = "Runda #" + _gameManager._round;
 
         //individual UI. _currentPlayerId needed for if's to work. case for player 0 working only.
 
         int currentPlayer = _gameManager._currentPlayerId;
-        playername_ui.text = _gameManager._players[currentPlayer].Nick.ToString();
+        playername_ui.text = _gameManager._players[currentPlayer].Nick;
         sun_points.text = _gameManager._players[currentPlayer].PointOfLights.ToString();
         seeds_count.text = _gameManager._players[currentPlayer].NumberOfSeeds.ToString();
         strees_count.text = _gameManager._players[currentPlayer].NumberOfSmallTrees.ToString();

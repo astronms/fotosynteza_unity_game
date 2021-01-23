@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
                             }
 
                             // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                            field._assignment._player.PointOfLights += pointoflightstoadd;
+                            field._assignment._player.ChangePointOfLights(pointoflightstoadd);
                         }
                     }
 
@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
                         }
 
                         // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                        field._assignment._player.PointOfLights += pointoflightstoadd;
+                        field._assignment._player.ChangePointOfLights(pointoflightstoadd);
 
                     }
 
@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
                         }
 
                         // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                        field._assignment._player.PointOfLights += pointoflightstoadd;
+                        field._assignment._player.ChangePointOfLights(pointoflightstoadd);
 
                     }
 
@@ -226,7 +226,7 @@ public class GameManager : MonoBehaviour
                         }
 
                         // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                        field._assignment._player.PointOfLights += pointoflightstoadd;
+                        field._assignment._player.ChangePointOfLights(pointoflightstoadd);
                     }
 
                 }
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
                         }
 
                         // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                        field._assignment._player.PointOfLights += pointoflightstoadd;
+                        field._assignment._player.ChangePointOfLights(pointoflightstoadd);
 
                     }
 
@@ -309,7 +309,7 @@ public class GameManager : MonoBehaviour
                         }
 
                         // dodanie graczowi odpowieniej ilości punktów za dane drzewo
-                        field._assignment._player.PointOfLights += pointoflightstoadd;
+                        field._assignment._player.ChangePointOfLights(pointoflightstoadd);
 
                     }
 
@@ -326,14 +326,8 @@ public class GameManager : MonoBehaviour
     }
 
     // weryfikacja możliwych do uzyskania punktów światła dla danego drzewa na względem danego dystansu
-    private int FieldVerification(int _x, int _y, int _z, int _pointoflightstoadd, int _distance, Field _field)
+    private int FieldVerification(int x, int y, int z, int pointoflightstoadd, int distance, Field field)
     {
-        int x = _x;
-        int y = _y;
-        int z = _z;
-        int pointoflightstoadd = _pointoflightstoadd;
-        int distance = _distance;
-        Field field = _field;
 
         if (_fieldsarray[x, y, z]._assignment != null && _fieldsarray[x, y, z]._assignment._treeLevel != TreeObject.TreeLvl.SEED)
         {
@@ -576,7 +570,7 @@ public class GameManager : MonoBehaviour
         {
             if (_round == 1)
             {
-                if (_players[_currentPlayerId].NumberOfSmallTrees > 2 && GetFieldLevel(field) == 1)
+                if (/*_players[_currentPlayerId].NumberOfSmallTrees > 2 &&*/ GetFieldLevel(field) == 1)
                     return actionType.plant;
             }
             else
@@ -616,8 +610,8 @@ public class GameManager : MonoBehaviour
         TreeObject seed = new TreeObject(TreeObject.TreeLvl.SEED, _players[_currentPlayerId]);
         field._assignment = seed;
         field._already_used = true;
-        _players[_currentPlayerId].NumberOfSeeds--;
-        _players[_currentPlayerId].PointOfLights--;
+        _players[_currentPlayerId].ChangeNumberOfSeeds(-1);
+        _players[_currentPlayerId].ChangePointOfLights(-1);
         return true;
     }
 
@@ -630,7 +624,7 @@ public class GameManager : MonoBehaviour
 
         TreeObject tree = new TreeObject(TreeObject.TreeLvl.SMALL, _players[_currentPlayerId]);
         field._assignment = tree;
-        _players[_currentPlayerId].NumberOfSmallTrees--;
+        _players[_currentPlayerId].ChangeNumberOfSmallTrees(-1);
         field._already_used = true;
         return true;
     }
@@ -639,22 +633,22 @@ public class GameManager : MonoBehaviour
     {
         Field field = GetFieldByVector(coordinates);
 
-        field._assignment.lvlUp();
+        field._assignment.LvlUp();
         field._already_used = true;
 
         switch(field._assignment._treeLevel)
         {
             case TreeObject.TreeLvl.SMALL:
-                _players[_currentPlayerId].NumberOfSmallTrees--;
-                _players[_currentPlayerId].PointOfLights--;
+                _players[_currentPlayerId].ChangeNumberOfSmallTrees(-1);
+                _players[_currentPlayerId].ChangePointOfLights(-1);
                 break;
             case TreeObject.TreeLvl.MID:
-                _players[_currentPlayerId].NumberOfMediumTrees--;
-                _players[_currentPlayerId].PointOfLights -= 2;
+                _players[_currentPlayerId].ChangeNumberOfMediumTrees(-1);
+                _players[_currentPlayerId].ChangePointOfLights(-2);
                 break;
             case TreeObject.TreeLvl.BIG:
-                _players[_currentPlayerId].NumberOfLargeTrees--;
-                _players[_currentPlayerId].PointOfLights -=3;
+                _players[_currentPlayerId].ChangeNumberOfLargeTrees(-1);
+                _players[_currentPlayerId].ChangePointOfLights(-3);
                 break;
         }
         return field._assignment._treeLevel;
@@ -664,7 +658,7 @@ public class GameManager : MonoBehaviour
     {
         Field field = GetFieldByVector(coordinates);
         field._already_used = true;
-        _players[_currentPlayerId].PointOfLights -= 4;
+        _players[_currentPlayerId].ChangePointOfLights(-4);
         field._assignment = null;
     }
 

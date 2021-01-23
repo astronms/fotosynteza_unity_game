@@ -21,9 +21,9 @@ public class TreeObject
         BIG
     }
 
-    public void lvlUp()
+    public void LvlUp()
     {
-        if ((int)_treeLevel < 3)
+        if (_treeLevel < (TreeLvl) 3)
         {
             _treeLevel += 1;
         }

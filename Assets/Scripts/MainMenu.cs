@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour
             }
             catch (NullReferenceException ex)
             {
-                Debug.Log("Not loaded _defaultColorBlockNick");
+                Debug.Log("Not loaded _defaultColorBlockNick - "+ ex);
             }
         }
     }
@@ -60,7 +60,7 @@ public class MainMenu : MonoBehaviour
     }
 
 
-    public async void NewGame()
+    public void NewGame()
     {
         if(MainGameUI.Instance != null)
         {
