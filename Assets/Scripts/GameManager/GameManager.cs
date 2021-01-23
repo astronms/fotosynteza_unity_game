@@ -91,14 +91,11 @@ public class GameManager : MonoBehaviour
                                 // weryfikacja czy pole istnieje
                                 if (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6)
                                 {
-                                    // throw new Exception($"Field ({x},{y},{z}) no exist");
+                                    break;
                                 }
-                                else
-                                {
+
                                     // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                     pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
-
-                                }
                             }
 
                             // dodanie graczowi odpowieniej ilości punktów za dane drzewo
@@ -134,7 +131,7 @@ public class GameManager : MonoBehaviour
                                 // weryfikacja czy pole istnieje
                                 if (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6)
                                 {
-                                    // throw new Exception($"Field ({x},{y},{z}) no exist");
+                                    break;
                                 }
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
@@ -176,7 +173,7 @@ public class GameManager : MonoBehaviour
                                 // weryfikacja czy pole istnieje
                                 if (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6)
                                 {
-                                    // throw new Exception($"Field ({x},{y},{z}) no exist");
+                                    break;
                                 }
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
@@ -217,7 +214,7 @@ public class GameManager : MonoBehaviour
                                 // weryfikacja czy pole istnieje
                                 if (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6)
                                 {
-                                    // throw new Exception($"Field ({x},{y},{z}) no exist");
+                                    break;
                                 }
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
@@ -256,14 +253,10 @@ public class GameManager : MonoBehaviour
                                 // weryfikacja czy pole istnieje
                                 if (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6)
                                 {
-                                    // throw new Exception($"Field ({x},{y},{z}) no exist");
+                                    break;
                                 }
-                                else
-                                {
                                     // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                     pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
-
-                                }
 
                             }
 
@@ -301,14 +294,10 @@ public class GameManager : MonoBehaviour
                                 // weryfikacja czy pole istnieje
                                 if (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6)
                                 {
-                                    // throw new Exception($"Field ({x},{y},{z}) no exist");
+                                    break;
                                 }
-                                else
-                                {
                                     // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                     pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
-
-                                }
 
                             }
 
