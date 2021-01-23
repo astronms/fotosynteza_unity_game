@@ -69,7 +69,7 @@ public class MainMenu : MonoBehaviour
         }
         SceneManager.LoadSceneAsync("_MAIN_SCENE");
         int playerNumber = 0;
-        int numberForName = 1;
+        int numberForNick = 1;
         List<Player> players = new List<Player>();
         for (int i = 0; i < 4; i++)
         {
@@ -81,8 +81,8 @@ public class MainMenu : MonoBehaviour
             {
                 if (nick.text.Length == 0)
                 {
-                    nick.text = "player " + numberForName;
-                    numberForName++;
+                    nick.text = "player " + numberForNick;
+                    numberForNick++;
                 }
                 players.Add(new Player(playerNumber, nick.text, 0));
                 playerNumber++;

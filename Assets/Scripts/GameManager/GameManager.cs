@@ -130,14 +130,11 @@ public class GameManager : MonoBehaviour
                             // weryfikacja czy pole istnieje
                             if ((x < 0 || y < 0 || z < 0) || (x > 6 || y > 6 || z > 6))
                             {
-                                break;
+                                throw new Exception($"Field ({x},{y},{z}) no exist");
                             }
-                            else
-                            {
-                                // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
-                                pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
+                            // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
+                            pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
 
-                            }
 
                         }
 
@@ -172,14 +169,10 @@ public class GameManager : MonoBehaviour
                             // weryfikacja czy pole istnieje
                             if ((x < 0 || y < 0 || z < 0) || (x > 6 || y > 6 || z > 6))
                             {
-                                break;
+                                throw new Exception($"Field ({x},{y},{z}) no exist");
                             }
-                            else
-                            {
-                                // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
-                                pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
-
-                            }
+                            // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
+                            pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
 
                         }
 
@@ -214,17 +207,11 @@ public class GameManager : MonoBehaviour
                             // weryfikacja czy pole istnieje
                             if ((x < 0 || y < 0 || z < 0) || (x > 6 || y > 6 || z > 6))
                             {
-                                break;
+                                throw new Exception($"Field ({x},{y},{z}) no exist");
                             }
-                            else
-                            {
-                                // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
-                                pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
-
-                            }
-
+                            // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
+                            pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                         }
-
                         // dodanie graczowi odpowieniej ilości punktów za dane drzewo
                         field._assignment._player.ChangePointOfLights(pointoflightstoadd);
                     }
@@ -560,7 +547,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public actionType AvailableActionOnField(Vector3Int vector) 
+    public actionType AvailableActionOnField(Vector3Int vector)
     {
         Field field = GetFieldByVector(vector);
         if (field._already_used == true)
@@ -570,7 +557,7 @@ public class GameManager : MonoBehaviour
         {
             if (_round == 1)
             {
-                if (/*_players[_currentPlayerId].NumberOfSmallTrees > 2 &&*/ GetFieldLevel(field) == 1)
+                if (_players[_currentPlayerId].NumberOfSmallTrees > 2 && GetFieldLevel(field) == 1)
                     return actionType.plant;
             }
             else
@@ -636,7 +623,7 @@ public class GameManager : MonoBehaviour
         field._assignment.LvlUp();
         field._already_used = true;
 
-        switch(field._assignment._treeLevel)
+        switch (field._assignment._treeLevel)
         {
             case TreeObject.TreeLvl.SMALL:
                 _players[_currentPlayerId].ChangeNumberOfSmallTrees(-1);

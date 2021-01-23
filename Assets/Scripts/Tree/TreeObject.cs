@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TreeObject
 {
-    public TreeLvl _treeLevel { get; set; }
+    public TreeLvl _treeLevel { get; private set; }
     public Player _player { get; set; } // wskaźnik do gracza
 
     public TreeObject(TreeLvl treelevel, Player player)
