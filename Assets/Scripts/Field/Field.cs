@@ -15,5 +15,12 @@ class Field
     public TreeObject _assignment { get; set; } //wskaźnik do umiejscowionego drzewa
 
     public bool _already_used { get; set; }
+    public bool[] _is_active { get; set; }
+
+    public Field()
+    {
+        _is_active = new bool[4];
+    }
+
 
 }

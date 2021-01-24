@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     // tablica wyszukiwania pól 
     Field[,,] _fieldsarray = new Field[7, 7, 7];
     // wartość pozycji słońca
-    /*int _sunposition;*/
     Sun_Rotation sun_Rotation;
     public int _round = 1;
 
@@ -605,7 +604,7 @@ public class GameManager : MonoBehaviour
     {
         Field field = GetFieldByVector(coordinates);
 
-        if (field._assignment != null)
+        if (field._assignment != null || field._is_active[_currentPlayerId] == false)
             return false;
 
         TreeObject seed = new TreeObject(TreeObject.TreeLvl.SEED, _players[_currentPlayerId]);
@@ -627,6 +626,7 @@ public class GameManager : MonoBehaviour
         field._assignment = tree;
         _players[_currentPlayerId].ChangeNumberOfSmallTrees(-1);
         field._already_used = true;
+        SetNeighborhoodToActive(field);
         return true;
     }
 
@@ -659,6 +659,7 @@ public class GameManager : MonoBehaviour
     {
         Field field = GetFieldByVector(coordinates);
         field._already_used = true;
+        SetNeighborhoodToInactive(field);
         _players[_currentPlayerId].ChangePointOfLights(-4);
         field._assignment = null;
     }
@@ -681,6 +682,45 @@ public class GameManager : MonoBehaviour
             NextRound();
             _currentPlayerId = 0;
         }
+    }
+    private void SetNeighborhoodToActive(Field _field)
+    {
+        var neighborhood = _fields.Where(field => field._vector.x >= MinVal(_field._vector.x - (int)_field._assignment._treeLevel) && field._vector.x <= MaxVal(_field._vector.x + (int)_field._assignment._treeLevel) && field._vector.y >= MinVal(_field._vector.y - (int)_field._assignment._treeLevel) && field._vector.y <= MaxVal(_field._vector.y + (int)_field._assignment._treeLevel) && field._vector.z >= MinVal(_field._vector.z - (int)_field._assignment._treeLevel) && field._vector.z <= MaxVal(_field._vector.z + (int)_field._assignment._treeLevel));
+        foreach (Field field_ in neighborhood)
+        {
+            SetFieldActive(field_);
+        }
+    }
+
+    private void SetNeighborhoodToInactive(Field _field)
+    {
+        var neighborhood = _fields.Where(field => field._vector.x >= MinVal(_field._vector.x - (int)_field._assignment._treeLevel) && field._vector.x <= MaxVal(_field._vector.x + (int)_field._assignment._treeLevel) && field._vector.y >= MinVal(_field._vector.y - (int)_field._assignment._treeLevel) && field._vector.y <= MaxVal(_field._vector.y + (int)_field._assignment._treeLevel) && field._vector.z >= MinVal(_field._vector.z - (int)_field._assignment._treeLevel) && field._vector.z <= MaxVal(_field._vector.z + (int)_field._assignment._treeLevel));
+        foreach (Field field_ in neighborhood)
+        {
+            SetFieldInactive(field_);
+        }
+    }
+
+    private void SetFieldActive(Field field)
+    {
+
+        field._is_active[_currentPlayerId] = true;
+
+    }
+
+    private void SetFieldInactive(Field field)
+    {
+        field._is_active[_currentPlayerId] = false;
+    }
+
+    private int MinVal(int x)
+    {
+        return x >= 0 ? x : 0;
+    }
+
+    private int MaxVal(int x)
+    {
+        return x <= 6 ? x : 6;
     }
 }
 
