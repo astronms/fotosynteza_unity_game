@@ -1,7 +1,16 @@
 fileFormatVersion: 2
-guid: a8116492dc880264faa5af2789885b28
-PrefabImporter:
-  externalObjects: {}
+guid: 78c29697749a6d44e964f9a0cf83d77a
+labels:
+- dead
+- plant
+- pack
+- low-poly
+- set
+- lowpoly
+- tree
+timeCreated: 1457642304
+licenseType: Store
+NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
