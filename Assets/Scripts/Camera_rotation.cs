@@ -14,6 +14,7 @@ public class Camera_rotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetKey(KeyCode.UpArrow))
         {
             this.transform.Translate(Vector3.forward *2* Time.deltaTime);
@@ -27,6 +28,8 @@ public class Camera_rotation : MonoBehaviour
             this.transform.Translate(Vector3.up *2* Time.deltaTime);
             MainGameUI.Instance.ExitFieldMenu();
         }
+        */
+
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
