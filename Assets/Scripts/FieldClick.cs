@@ -20,7 +20,9 @@ public class FieldClick : MonoBehaviour
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
         Transform field = gameObject.transform.parent;
         Vector3 mousePos = Input.mousePosition;
-        Vector3 shift = new Vector3(50, 0, 0);
+
+        float width = ((RectTransform)fieldMenu.transform).rect.width;
+        Vector3 shift = new Vector3(width * (float)(Screen.width / 1283.0), 0, 0);
 
         if (name == "Cylinder" && !IsPointerOverUIElement())
         {
