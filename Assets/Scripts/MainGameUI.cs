@@ -48,22 +48,22 @@ public class MainGameUI : MonoBehaviour
         foreach (Transform child in boardTransform)
         {
             var tmp = child.name.Split('[', ']')[1].Split(';');
-            Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
+            Vector3Int fieldCoordinates = Field.GetCoordinates(tmp);
             coordinatesList.Add(fieldCoordinates);
         }
 
         return coordinatesList;
     }
+    private void NewSeedInit(GameObject tmps, GameObject clickedField, string fieldName)
+    {
+        GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
+        newSeed.transform.parent = _treesGroup.transform;
+        newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
+    }
 
     public void SowSeed()
     {
-        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
-        fieldMenu.SetActive(false);
-
-        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<Text>().text;
-        var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
+        var fieldName = GetFieldName(out var fieldCoordinates);
 
         bool result = _gameManager.AddSeed(fieldCoordinates);
 
@@ -71,9 +71,7 @@ public class MainGameUI : MonoBehaviour
         {
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
             GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId) as GameObject;
-            GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
-            newSeed.transform.parent = _treesGroup.transform;
-            newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
+            NewSeedInit(tmps, clickedField, fieldName);
         }
         else
         {
@@ -84,23 +82,14 @@ public class MainGameUI : MonoBehaviour
 
     public void PlantTree() //this method shoud be called only in first game round
     {
-        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
-        fieldMenu.SetActive(false);
-
-        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<Text>().text;
-        var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
-
+        var fieldName = GetFieldName(out var fieldCoordinates);
         bool result = _gameManager.PlantTree(fieldCoordinates);
 
         if (result)
         {
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
             GameObject tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId) as GameObject;
-            GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
-            newSeed.transform.parent = _treesGroup.transform;
-            newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
+            NewSeedInit(tmps, clickedField, fieldName);
         }
         else
         {
@@ -109,7 +98,7 @@ public class MainGameUI : MonoBehaviour
         }
     }
 
-    public void UpgradeTree()
+    private static string GetFieldName(out Vector3Int fieldCoordinates)
     {
         GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
         fieldMenu.SetActive(false);
@@ -117,11 +106,21 @@ public class MainGameUI : MonoBehaviour
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
         string fieldName = fieldNameHolder.GetComponent<Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
+        fieldCoordinates = Field.GetCoordinates(tmp);
+        return fieldName;
+    }
 
+    private static void DestroyExistingTree(string fieldName)
+    {
         GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
         Destroy(existingTree);
 
+    }
+
+    public void UpgradeTree()
+    {
+        string fieldName = GetFieldName(out var fieldCoordinates);
+        DestroyExistingTree(fieldName);
         TreeObject.TreeLvl lvl = _gameManager.UpgradeTree(fieldCoordinates);
         GameObject clickedField = GameObject.Find("/Board/" + fieldName);
         GameObject tree;
@@ -149,19 +148,12 @@ public class MainGameUI : MonoBehaviour
         }
     }
 
+
+
     public void CutTree()
     {
-        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
-        fieldMenu.SetActive(false);
-
-        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<Text>().text;
-        var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
-
-        GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
-        Destroy(existingTree);
-
+        string fieldName = GetFieldName(out var fieldCoordinates);
+        DestroyExistingTree(fieldName);
         _gameManager.CutTree(fieldCoordinates);
     }
 

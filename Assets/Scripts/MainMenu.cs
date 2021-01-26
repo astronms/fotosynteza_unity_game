@@ -23,6 +23,14 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Not loaded _defaultColorBlockNick - " + ex);
             }
     }
+    private static TMP_Dropdown GetDropdownOption(int i, out TMP_InputField nick)
+    {
+        TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
+            .GetComponent<TMP_Dropdown>();
+        nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
+            .GetComponent<TMP_InputField>();
+        return dropdown;
+    }
 
     /// <summary>
     ///     called when updating the GUI
@@ -32,10 +40,7 @@ public class MainMenu : MonoBehaviour
         if (ToString() == "NewGameMenu (MainMenu)")
             for (int i = 0; i < 4; i++)
             {
-                TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
-                    .GetComponent<TMP_Dropdown>();
-                TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
-                    .GetComponent<TMP_InputField>();
+                var dropdown = GetDropdownOption(i, out var nick);
 
                 if (dropdown.options[dropdown.value].text == "Brak")
                 {
@@ -53,6 +58,8 @@ public class MainMenu : MonoBehaviour
     }
 
 
+
+
     public void NewGame()
     {
         if (MainGameUI.Instance != null)
@@ -67,10 +74,7 @@ public class MainMenu : MonoBehaviour
         List<Player> players = new List<Player>();
         for (int i = 0; i < 4; i++)
         {
-            TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
-                .GetComponent<TMP_Dropdown>();
-            TMP_InputField nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
-                .GetComponent<TMP_InputField>();
+            var dropdown = GetDropdownOption(i, out var nick);
             if (dropdown.options[dropdown.value].text != "Brak")
             {
                 if (nick.text.Length == 0)

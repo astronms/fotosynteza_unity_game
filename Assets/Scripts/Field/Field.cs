@@ -15,4 +15,9 @@ internal class Field
 
     public bool _already_used { get; set; }
     public bool[] _is_active { get; set; }
+    public static Vector3Int GetCoordinates(string[] tmp)
+    {
+        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
+        return fieldCoordinates;
+    }
 }

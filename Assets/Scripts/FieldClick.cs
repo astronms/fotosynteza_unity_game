@@ -25,7 +25,7 @@ public class FieldClick : MonoBehaviour
         if (name == "Cylinder" && !IsPointerOverUIElement())
         {
             var tmp = field.name.Split('[', ']')[1].Split(';');
-            Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
+            Vector3Int fieldCoordinates = Field.GetCoordinates(tmp);
             actionType action = _gameManager.AvailableActionOnField(fieldCoordinates);
 
             GameObject updateButton = GameObject.Find("/GameUI/FieldMenu/Panel/UpgradeTreeButton");
@@ -65,6 +65,8 @@ public class FieldClick : MonoBehaviour
             }
         }
     }
+
+
 
     private static bool IsPointerOverUIElement()
     {

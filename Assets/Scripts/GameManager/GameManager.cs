@@ -462,28 +462,26 @@ public class GameManager : MonoBehaviour
             _currentPlayerId = 0;
         }
     }
+    private IEnumerable<Field> NeighborhoodFields(Field _field)
+    {
+        return _fields.Where(field =>
+            field._vector.x >= MinVal(_field._vector.x - (int)_field._assignment._treeLevel) &&
+            field._vector.x <= MaxVal(_field._vector.x + (int)_field._assignment._treeLevel) &&
+            field._vector.y >= MinVal(_field._vector.y - (int)_field._assignment._treeLevel) &&
+            field._vector.y <= MaxVal(_field._vector.y + (int)_field._assignment._treeLevel) &&
+            field._vector.z >= MinVal(_field._vector.z - (int)_field._assignment._treeLevel) &&
+            field._vector.z <= MaxVal(_field._vector.z + (int)_field._assignment._treeLevel));
+    }
 
     private void SetNeighborhoodToActive(Field _field)
     {
-        var neighborhood = _fields.Where(field =>
-            field._vector.x >= MinVal(_field._vector.x - (int) _field._assignment._treeLevel) &&
-            field._vector.x <= MaxVal(_field._vector.x + (int) _field._assignment._treeLevel) &&
-            field._vector.y >= MinVal(_field._vector.y - (int) _field._assignment._treeLevel) &&
-            field._vector.y <= MaxVal(_field._vector.y + (int) _field._assignment._treeLevel) &&
-            field._vector.z >= MinVal(_field._vector.z - (int) _field._assignment._treeLevel) &&
-            field._vector.z <= MaxVal(_field._vector.z + (int) _field._assignment._treeLevel));
+        var neighborhood = NeighborhoodFields(_field);
         foreach (Field field_ in neighborhood) SetFieldActive(field_);
     }
 
     private void SetNeighborhoodToInactive(Field _field)
     {
-        var neighborhood = _fields.Where(field =>
-            field._vector.x >= MinVal(_field._vector.x - (int) _field._assignment._treeLevel) &&
-            field._vector.x <= MaxVal(_field._vector.x + (int) _field._assignment._treeLevel) &&
-            field._vector.y >= MinVal(_field._vector.y - (int) _field._assignment._treeLevel) &&
-            field._vector.y <= MaxVal(_field._vector.y + (int) _field._assignment._treeLevel) &&
-            field._vector.z >= MinVal(_field._vector.z - (int) _field._assignment._treeLevel) &&
-            field._vector.z <= MaxVal(_field._vector.z + (int) _field._assignment._treeLevel));
+        var neighborhood = NeighborhoodFields(_field);
         foreach (Field field_ in neighborhood) SetFieldInactive(field_);
     }
 
