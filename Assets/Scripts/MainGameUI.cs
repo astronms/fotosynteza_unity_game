@@ -79,6 +79,7 @@ public class MainGameUI : MonoBehaviour
         }
         else
         {
+            MessageBox.Show("Błąd podczas siania nasiona.", "Błąd");
             Debug.Log("Error during sowing seed.");
         }
     }
@@ -105,6 +106,7 @@ public class MainGameUI : MonoBehaviour
         }
         else
         {
+            MessageBox.Show("Błąd podczas siania nasiona.", "Błąd");
             Debug.Log("Error during sowing seed.");
         }
     }

@@ -9,15 +9,6 @@ public class Sun_Rotation : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(Rotate(Vector3.up, 60, 1.0f));
-            sun_position += 1;
-            if (sun_position > 5)
-            {
-                sun_position = 0;
-            }
-        }
     }
 
     public Sun_Rotation()

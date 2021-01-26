@@ -83,33 +83,33 @@ public class MessageBox : ModalBox
                 button.GetComponentInChildren<Text>().text = Localize("OK");
                 button.GetComponent<Button>().onClick.AddListener(() => { result = DialogResult.OK; Close(); });
 
-                CreateButton(button, Localize("Cancel"), () => { result = DialogResult.Cancel; Close(); });
+                CreateButton(button, Localize("Anuluj"), () => { result = DialogResult.Cancel; Close(); });
                 break;
             case MessageBoxButtons.YesNo:
-                button.GetComponentInChildren<Text>().text = Localize("Yes");
+                button.GetComponentInChildren<Text>().text = Localize("Tak");
                 button.GetComponent<Button>().onClick.AddListener(() => { result = DialogResult.Yes; Close(); });
 
-                CreateButton(button, Localize("No"), () => { result = DialogResult.No; Close(); });
+                CreateButton(button, Localize("Nie"), () => { result = DialogResult.No; Close(); });
                 break;
             case MessageBoxButtons.RetryCancel:
-                button.GetComponentInChildren<Text>().text = Localize("Retry");
+                button.GetComponentInChildren<Text>().text = Localize("Ponów");
                 button.GetComponent<Button>().onClick.AddListener(() => { result = DialogResult.Retry; Close(); });
 
-                CreateButton(button, Localize("Cancel"), () => { result = DialogResult.Cancel; Close(); });
+                CreateButton(button, Localize("Anuluj"), () => { result = DialogResult.Cancel; Close(); });
                 break;
             case MessageBoxButtons.YesNoCancel:
-                button.GetComponentInChildren<Text>().text = Localize("Yes");
+                button.GetComponentInChildren<Text>().text = Localize("Tak");
                 button.GetComponent<Button>().onClick.AddListener(() => { result = DialogResult.Yes; Close(); });
 
-                CreateButton(button, Localize("No"), () => { result = DialogResult.No; Close(); });
-                CreateButton(button, Localize("Cancel"), () => { result = DialogResult.Cancel; Close(); });
+                CreateButton(button, Localize("Nie"), () => { result = DialogResult.No; Close(); });
+                CreateButton(button, Localize("Anuluj"), () => { result = DialogResult.Cancel; Close(); });
                 break;
             case MessageBoxButtons.AbortRetryIgnore:
-                button.GetComponentInChildren<Text>().text = Localize("Abort");
+                button.GetComponentInChildren<Text>().text = Localize("Przerwij");
                 button.GetComponent<Button>().onClick.AddListener(() => { result = DialogResult.Abort; Close(); });
 
-                CreateButton(button, Localize("Retry"), () => { result = DialogResult.Retry; Close(); });
-                CreateButton(button, Localize("Ignore"), () => { result = DialogResult.Ignore; Close(); });
+                CreateButton(button, Localize("Ponów"), () => { result = DialogResult.Retry; Close(); });
+                CreateButton(button, Localize("Ignoruj"), () => { result = DialogResult.Ignore; Close(); });
                 break;
         }
     }
