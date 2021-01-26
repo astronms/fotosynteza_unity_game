@@ -1,36 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using System.Collections;
-using UnityEngine.SceneManagement;
-
 
 public class GameManager : MonoBehaviour
 {
-    private MainGameUI _mainGameUI;
+    public int _currentPlayerId; //refers to the player who is currently taking his turn
 
     // zbiór pól
-    List<Field> _fields = new List<Field>();
+    private List<Field> _fields = new List<Field>();
+
     // tablica wyszukiwania pól 
-    Field[,,] _fieldsarray = new Field[7, 7, 7]; 
-    // wartość pozycji słońca
-    Sun_Rotation sun_Rotation;
-    public int _round = 1;
+    private readonly Field[,,] _fieldsarray = new Field[7, 7, 7];
+    private MainGameUI _mainGameUI;
 
     //players 
     public List<Player> _players = new List<Player>();
-    public int _currentPlayerId; //refers to the player who is currently taking his turn
 
-    void Start()
+    public int _round = 1;
+
+    // wartość pozycji słońca
+    private Sun_Rotation sun_Rotation;
+
+    private void Start()
     {
         DontDestroyOnLoad(transform.gameObject);
     }
 
     /// <summary>
-    /// method called when the main game starts
+    ///     method called when the main game starts
     /// </summary>
     /// <param name="players">List of active players</param>
     public void startNewGame(List<Player> players)
@@ -41,7 +39,8 @@ public class GameManager : MonoBehaviour
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
     }
 
-    public void MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
+    public void
+        MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
     {
         _mainGameUI = MainGameUI.Instance;
 
@@ -55,6 +54,7 @@ public class GameManager : MonoBehaviour
             field._vector = coordinate;
             _fields.Add(field);
         }
+
         //Filling field array to FazePhotosynthesis
         FillFieldArray();
         //Getting sun_Rotation object
@@ -68,16 +68,15 @@ public class GameManager : MonoBehaviour
             int x = field._vector.x;
             int y = field._vector.y;
             int z = field._vector.z;
-            int pointoflightstoadd = 0; 
+            int pointoflightstoadd = 0;
 
             // weryfikacja czy na polu ustawione jest drzewo
             if (field._assignment != null)
-            {
                 if (field._assignment._treeLevel != TreeObject.TreeLvl.SEED)
                 {
                     // ustawianie bazowych punktów światła do uzyskania dla sprawdzanego drzewa
                     pointoflightstoadd = SetTreeValue(field);
-                            
+
                     switch (position)
                     {
                         case 0:
@@ -87,13 +86,11 @@ public class GameManager : MonoBehaviour
                                 x--;
                                 y++;
                                 // weryfikacja czy pole istnieje
-                                if (FieldRangeVerification(x, y, z))
-                                {
-                                    break;
-                                }
+                                if (FieldRangeVerification(x, y, z)) break;
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                             }
+
                             break;
 
                         case 1:
@@ -103,13 +100,11 @@ public class GameManager : MonoBehaviour
                                 x--;
                                 z++;
                                 // weryfikacja czy pole istnieje
-                                if (FieldRangeVerification(x, y, z))
-                                {
-                                    break;
-                                }
+                                if (FieldRangeVerification(x, y, z)) break;
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                             }
+
                             break;
 
                         case 2:
@@ -119,13 +114,11 @@ public class GameManager : MonoBehaviour
                                 y--;
                                 z++;
                                 // weryfikacja czy pole istnieje
-                                if (FieldRangeVerification(x, y, z))
-                                {
-                                    break;
-                                }
+                                if (FieldRangeVerification(x, y, z)) break;
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                             }
+
                             break;
 
                         case 3:
@@ -135,13 +128,11 @@ public class GameManager : MonoBehaviour
                                 x++;
                                 y--;
                                 // weryfikacja czy pole istnieje
-                                if (FieldRangeVerification(x, y, z))
-                                {
-                                    break;
-                                }
+                                if (FieldRangeVerification(x, y, z)) break;
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                             }
+
                             break;
 
                         case 4:
@@ -151,13 +142,11 @@ public class GameManager : MonoBehaviour
                                 x++;
                                 z--;
                                 // weryfikacja czy pole istnieje
-                                if (FieldRangeVerification(x, y, z))
-                                {
-                                    break;
-                                }
+                                if (FieldRangeVerification(x, y, z)) break;
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                             }
+
                             break;
 
                         case 5:
@@ -167,172 +156,131 @@ public class GameManager : MonoBehaviour
                                 y++;
                                 z--;
                                 // weryfikacja czy pole istnieje
-                                if (FieldRangeVerification(x, y, z))
-                                {
-                                    break;
-                                }
+                                if (FieldRangeVerification(x, y, z)) break;
                                 // weryfikacja czy na polu o dystansie distance przed drzewem jest inne drzewo
                                 pointoflightstoadd = FieldVerification(x, y, z, pointoflightstoadd, distance, field);
                             }
+
                             break;
 
                         default:
                             Console.WriteLine("Error - point of lights not counted.");
                             break;
-
                     }
+
                     // dodanie graczowi odpowieniej ilości punktów za dane drzewo
                     field._assignment._player.ChangePointOfLights(pointoflightstoadd);
                 }
-            }
         }
     }
 
     // weryfikacja zakresu pola
-    private bool FieldRangeVerification(int x, int y , int z)
+    private bool FieldRangeVerification(int x, int y, int z)
     {
-        return (x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6);
+        return x < 0 || y < 0 || z < 0 || x > 6 || y > 6 || z > 6;
     }
 
     // weryfikacja możliwych do uzyskania punktów światła dla danego drzewa na względem danego dystansu
     private int FieldVerification(int x, int y, int z, int pointoflightstoadd, int distance, Field field)
     {
-        Debug.Log("SOMETHING" + "  " + field._vector.x.ToString() + "   " + field._vector.y.ToString() + "   " + field._vector.z.ToString());
-        Debug.Log("something" + "  " + x.ToString() + "   " + y.ToString() + "   " + z.ToString());
+        Debug.Log("SOMETHING" + "  " + field._vector.x + "   " + field._vector.y + "   " + field._vector.z);
+        Debug.Log("something" + "  " + x + "   " + y + "   " + z);
         var result = _fields.Where(f => f._vector.x == x && f._vector.y == y && f._vector.z == z).FirstOrDefault();
 
         if (result._assignment != null)
-        {
             if (result._assignment._treeLevel != TreeObject.TreeLvl.SEED)
-            {
                 switch (field._assignment._treeLevel)
                 {
                     case TreeObject.TreeLvl.SMALL:
                         switch (distance)
-                            {
-                                case 1:
-                                    // niezależnie jakie drzewo jest na pozycji zawsze zacieni małe drzewo 
+                        {
+                            case 1:
+                                // niezależnie jakie drzewo jest na pozycji zawsze zacieni małe drzewo 
+                                pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
+                                break;
+                            case 2:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                else
                                     pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
-                                    break;
-                                case 2:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
-                                    }
-                                    break;
-                                case 3:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.BIG)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    break;
-                                default:
-                                    Console.WriteLine("Error - point of lights - shading - smalltree.");
-                                    break;
-                            }
+                                break;
+                            case 3:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.BIG)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                break;
+                            default:
+                                Console.WriteLine("Error - point of lights - shading - smalltree.");
+                                break;
+                        }
+
                         break;
                     case TreeObject.TreeLvl.MID:
                         switch (distance)
-                            {
-                                case 1:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
-                                    }
-                                    break;
-                                case 2:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
-                                    }
-                                    else if (result._assignment._treeLevel == TreeObject.TreeLvl.MID)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
-                                    }
-                                    break;
-                                case 3:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.BIG)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
-                                    }
-                                    break;
-                                default:
-                                    Console.WriteLine("Error - point of lights - shading - midtree.");
-                                    break;
-                            }
+                        {
+                            case 1:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
+                                break;
+                            case 2:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
+                                else if (result._assignment._treeLevel == TreeObject.TreeLvl.MID)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
+                                break;
+                            case 3:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.BIG)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
+                                break;
+                            default:
+                                Console.WriteLine("Error - point of lights - shading - midtree.");
+                                break;
+                        }
+
                         break;
                     case TreeObject.TreeLvl.BIG:
                         switch (distance)
-                            {
-                                case 1:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
-                                    }
-                                    else if (result._assignment._treeLevel == TreeObject.TreeLvl.MID)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
-                                    }
-                                    break;
-                                case 2:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 3);
-                                    }
-                                    else if (result._assignment._treeLevel == TreeObject.TreeLvl.MID)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
-                                    }
-                                    break;
-                                case 3:
-                                    if (result._assignment._treeLevel == TreeObject.TreeLvl.BIG)
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
-                                    }
-                                    else
-                                    {
-                                        pointoflightstoadd = Math.Min(pointoflightstoadd, 3);
-                                    }
-                                    break;
-                                default:
-                                    Console.WriteLine("Error - point of lights - shading - bigtree.");
-                                    break;
-                            }
+                        {
+                            case 1:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
+                                else if (result._assignment._treeLevel == TreeObject.TreeLvl.MID)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 0);
+                                break;
+                            case 2:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.SMALL)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 3);
+                                else if (result._assignment._treeLevel == TreeObject.TreeLvl.MID)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 1);
+                                break;
+                            case 3:
+                                if (result._assignment._treeLevel == TreeObject.TreeLvl.BIG)
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 2);
+                                else
+                                    pointoflightstoadd = Math.Min(pointoflightstoadd, 3);
+                                break;
+                            default:
+                                Console.WriteLine("Error - point of lights - shading - bigtree.");
+                                break;
+                        }
+
                         break;
                     default:
                         Console.WriteLine("Error - point of lights to add not verified.");
                         break;
                 }
-            }
-        }
+
         return pointoflightstoadd;
     }
 
@@ -356,6 +304,7 @@ public class GameManager : MonoBehaviour
                 Console.WriteLine("Error - point of lights - shading - tree.");
                 break;
         }
+
         return pointoflightstoadd;
     }
 
@@ -369,27 +318,25 @@ public class GameManager : MonoBehaviour
     private Field GetFieldByVector(Vector3Int vector)
     {
         foreach (Field field in _fields)
-        {
             if (field._vector == vector)
                 return field;
-        }
         return null;
     }
 
     private int GetFieldLevel(Field field)
     {
         Vector3Int position = field._vector;
-        if (position.x == 0 || position.x == 6 || position.y == 0 || position.y == 6 || position.z == 0 || position.z == 6)
+        if (position.x == 0 || position.x == 6 || position.y == 0 || position.y == 6 || position.z == 0 ||
+            position.z == 6)
             return 1;
-        else
-            return 2;
+        return 2;
     }
 
 
     public actionType AvailableActionOnField(Vector3Int vector)
     {
         Field field = GetFieldByVector(vector);
-        if (field._already_used == true)
+        if (field._already_used)
             return actionType.none;
 
         if (field._assignment == null) //SEED
@@ -404,26 +351,30 @@ public class GameManager : MonoBehaviour
                 if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0)
                     return actionType.seed;
             }
+
             return actionType.none;
         }
-        else //UPGRADE / CUT
+
+        if (field._assignment._player == _players[_currentPlayerId] &&
+            field._assignment._treeLevel < TreeObject.TreeLvl.BIG) //Upgrafe
         {
-            if (field._assignment._player == _players[_currentPlayerId] && field._assignment._treeLevel < TreeObject.TreeLvl.BIG) //Upgrafe
-            {
-                if (field._assignment._treeLevel == TreeObject.TreeLvl.SEED && _players[_currentPlayerId].NumberOfSmallTrees > 0 && _players[_currentPlayerId].PointOfLights > 0)
-                    return actionType.upgrade;
-                else if (field._assignment._treeLevel == TreeObject.TreeLvl.SMALL && _players[_currentPlayerId].NumberOfMediumTrees > 0 && _players[_currentPlayerId].PointOfLights > 1)
-                    return actionType.upgrade;
-                else if (field._assignment._treeLevel == TreeObject.TreeLvl.MID && _players[_currentPlayerId].NumberOfLargeTrees > 0 && _players[_currentPlayerId].PointOfLights > 2)
-                    return actionType.upgrade;
-                else
-                    return actionType.none;
-            }
-            else if (field._assignment._player == _players[_currentPlayerId] && field._assignment._treeLevel == TreeObject.TreeLvl.BIG && _players[_currentPlayerId].PointOfLights > 4) //cut
-                return actionType.cut;
-            else
-                return actionType.none;
+            if (field._assignment._treeLevel == TreeObject.TreeLvl.SEED &&
+                _players[_currentPlayerId].NumberOfSmallTrees > 0 && _players[_currentPlayerId].PointOfLights > 0)
+                return actionType.upgrade;
+            if (field._assignment._treeLevel == TreeObject.TreeLvl.SMALL &&
+                _players[_currentPlayerId].NumberOfMediumTrees > 0 && _players[_currentPlayerId].PointOfLights > 1)
+                return actionType.upgrade;
+            if (field._assignment._treeLevel == TreeObject.TreeLvl.MID &&
+                _players[_currentPlayerId].NumberOfLargeTrees > 0 && _players[_currentPlayerId].PointOfLights > 2)
+                return actionType.upgrade;
+            return actionType.none;
         }
+
+        if (field._assignment._player == _players[_currentPlayerId] &&
+            field._assignment._treeLevel == TreeObject.TreeLvl.BIG &&
+            _players[_currentPlayerId].PointOfLights > 4) //cut
+            return actionType.cut;
+        return actionType.none;
     }
 
     public bool AddSeed(Vector3Int coordinates)
@@ -478,6 +429,7 @@ public class GameManager : MonoBehaviour
                 _players[_currentPlayerId].ChangePointOfLights(-3);
                 break;
         }
+
         return field._assignment._treeLevel;
     }
 
@@ -501,37 +453,44 @@ public class GameManager : MonoBehaviour
 
     public void EndPlayerTurn()
     {
-        if ((_currentPlayerId + 1) < _players.Count)
+        if (_currentPlayerId + 1 < _players.Count)
+        {
             _currentPlayerId++;
+        }
         else
         {
             NextRound();
             _currentPlayerId = 0;
         }
     }
+
     private void SetNeighborhoodToActive(Field _field)
     {
-        var neighborhood = _fields.Where(field => field._vector.x >= MinVal(_field._vector.x - (int)_field._assignment._treeLevel) && field._vector.x <= MaxVal(_field._vector.x + (int)_field._assignment._treeLevel) && field._vector.y >= MinVal(_field._vector.y - (int)_field._assignment._treeLevel) && field._vector.y <= MaxVal(_field._vector.y + (int)_field._assignment._treeLevel) && field._vector.z >= MinVal(_field._vector.z - (int)_field._assignment._treeLevel) && field._vector.z <= MaxVal(_field._vector.z + (int)_field._assignment._treeLevel));
-        foreach (Field field_ in neighborhood)
-        {
-            SetFieldActive(field_);
-        }
+        var neighborhood = _fields.Where(field =>
+            field._vector.x >= MinVal(_field._vector.x - (int) _field._assignment._treeLevel) &&
+            field._vector.x <= MaxVal(_field._vector.x + (int) _field._assignment._treeLevel) &&
+            field._vector.y >= MinVal(_field._vector.y - (int) _field._assignment._treeLevel) &&
+            field._vector.y <= MaxVal(_field._vector.y + (int) _field._assignment._treeLevel) &&
+            field._vector.z >= MinVal(_field._vector.z - (int) _field._assignment._treeLevel) &&
+            field._vector.z <= MaxVal(_field._vector.z + (int) _field._assignment._treeLevel));
+        foreach (Field field_ in neighborhood) SetFieldActive(field_);
     }
 
     private void SetNeighborhoodToInactive(Field _field)
     {
-        var neighborhood = _fields.Where(field => field._vector.x >= MinVal(_field._vector.x - (int)_field._assignment._treeLevel) && field._vector.x <= MaxVal(_field._vector.x + (int)_field._assignment._treeLevel) && field._vector.y >= MinVal(_field._vector.y - (int)_field._assignment._treeLevel) && field._vector.y <= MaxVal(_field._vector.y + (int)_field._assignment._treeLevel) && field._vector.z >= MinVal(_field._vector.z - (int)_field._assignment._treeLevel) && field._vector.z <= MaxVal(_field._vector.z + (int)_field._assignment._treeLevel));
-        foreach (Field field_ in neighborhood)
-        {
-            SetFieldInactive(field_);
-        }
+        var neighborhood = _fields.Where(field =>
+            field._vector.x >= MinVal(_field._vector.x - (int) _field._assignment._treeLevel) &&
+            field._vector.x <= MaxVal(_field._vector.x + (int) _field._assignment._treeLevel) &&
+            field._vector.y >= MinVal(_field._vector.y - (int) _field._assignment._treeLevel) &&
+            field._vector.y <= MaxVal(_field._vector.y + (int) _field._assignment._treeLevel) &&
+            field._vector.z >= MinVal(_field._vector.z - (int) _field._assignment._treeLevel) &&
+            field._vector.z <= MaxVal(_field._vector.z + (int) _field._assignment._treeLevel));
+        foreach (Field field_ in neighborhood) SetFieldInactive(field_);
     }
 
     private void SetFieldActive(Field field)
     {
-
         field._is_active[_currentPlayerId] = true;
-
     }
 
     private void SetFieldInactive(Field field)
@@ -549,4 +508,3 @@ public class GameManager : MonoBehaviour
         return x <= 6 ? x : 6;
     }
 }
-
