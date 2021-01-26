@@ -51,7 +51,7 @@ public class MainGameUI : MonoBehaviour
         foreach (Transform child in boardTransform)
         {
             var tmp = child.name.Split('[', ']')[1].Split(';');
-            Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+            Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
             coordinatesList.Add(fieldCoordinates);
         }
         return coordinatesList;
@@ -65,14 +65,14 @@ public class MainGameUI : MonoBehaviour
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
         string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
         bool result = _gameManager.AddSeed(fieldCoordinates);
 
         if (result)
         {
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
-            GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+            GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId) as GameObject;
             GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
             newSeed.transform.parent = _treesGroup.transform;
             newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
@@ -99,7 +99,7 @@ public class MainGameUI : MonoBehaviour
         if (result)
         {
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
-            GameObject tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+            GameObject tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId) as GameObject;
             GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
             newSeed.transform.parent = _treesGroup.transform;
             newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
@@ -119,7 +119,7 @@ public class MainGameUI : MonoBehaviour
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
         string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
         GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
         Destroy(existingTree);
@@ -131,19 +131,19 @@ public class MainGameUI : MonoBehaviour
         switch (lvl)
         {
             case TreeObject.TreeLvl.SMALL:
-                tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+                tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId) as GameObject;
                 tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
                 tree.transform.parent = _treesGroup.transform;
                 tree.transform.name = "Tree_" + fieldName.Split('_')[1];
                 break;
             case TreeObject.TreeLvl.MID:
-                tmps = Resources.Load("MediumTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+                tmps = Resources.Load("MediumTree_Player_" + _gameManager._currentPlayerId) as GameObject;
                 tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
                 tree.transform.parent = _treesGroup.transform;
                 tree.transform.name = "Tree_" + fieldName.Split('_')[1];
                 break;
             case TreeObject.TreeLvl.BIG:
-                tmps = Resources.Load("BigTree_Player_" + _gameManager._currentPlayerId.ToString()) as GameObject;
+                tmps = Resources.Load("BigTree_Player_" + _gameManager._currentPlayerId) as GameObject;
                 tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
                 tree.transform.parent = _treesGroup.transform;
                 tree.transform.name = "Tree_" + fieldName.Split('_')[1];
@@ -159,7 +159,7 @@ public class MainGameUI : MonoBehaviour
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
         string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
         GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
         Destroy(existingTree);

@@ -49,7 +49,7 @@ public class Player
         }
         else
         {
-            MessageBox.Show("Nie masz wystarczająco punktów światła");
+            MessageBox.Show("Nie masz wystarczająco punktów światła", "Uwaga");
             Debug.Log("Not enough PointOfLights");
             return false;
         }
@@ -64,7 +64,7 @@ public class Player
         }
         else
         {
-            MessageBox.Show("Nie masz wystarczająco małych drzew");
+            MessageBox.Show("Nie masz wystarczająco małych drzew", "Uwaga");
             Debug.Log("Not enough NumberOfSmallTrees");
             return false;
         }
@@ -79,7 +79,7 @@ public class Player
         }
         else
         {
-            MessageBox.Show("Nie masz wystarczająco sadzonek");
+            MessageBox.Show("Nie masz wystarczająco sadzonek", "Uwaga");
             Debug.Log("Not enough NumberOfSeeds");
             return false;
         }
@@ -94,7 +94,7 @@ public class Player
         }
         else
         {
-            MessageBox.Show("Nie masz wystarczająco średnich drzew");
+            MessageBox.Show("Nie masz wystarczająco średnich drzew", "Uwaga");
             Debug.Log("Not enough NumberOfMediumTrees");
             return false;
         }
@@ -109,7 +109,7 @@ public class Player
         }
         else
         {
-            MessageBox.Show("Nie masz wystarczająco dużych drzew");
+            MessageBox.Show("Nie masz wystarczająco dużych drzew", "Uwaga");
             Debug.Log("Not enough NumberOfLargeTrees");
             return false;
         }
