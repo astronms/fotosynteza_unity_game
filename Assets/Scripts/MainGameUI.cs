@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainGameUI : MonoBehaviour
 {
-    public static MainGameUI Instance { get; private set; }
     private GameManager _gameManager;
     private GameObject _treesGroup;
+    public Text ltrees_count;
+    public Text mtrees_count;
 
-    [Header("UI variables")]
+    [Header("UI variables")] public Text name1_ui;
 
-    public Text name1_ui;
     public Text name2_ui;
     public Text name3_ui;
     public Text name4_ui;
@@ -22,16 +20,15 @@ public class MainGameUI : MonoBehaviour
     public Text player3_ui_points;
     public Text player4_ui_points;
 
-    public Text round_count;
-
     public Text playername_ui;
-    public Text sun_points;
+
+    public Text round_count;
     public Text seeds_count;
     public Text strees_count;
-    public Text mtrees_count;
-    public Text ltrees_count;
+    public Text sun_points;
+    public static MainGameUI Instance { get; private set; }
 
-    void Start()
+    private void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         DontDestroyOnLoad(transform.gameObject);
@@ -54,6 +51,7 @@ public class MainGameUI : MonoBehaviour
             Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
             coordinatesList.Add(fieldCoordinates);
         }
+
         return coordinatesList;
     }
 
@@ -63,7 +61,7 @@ public class MainGameUI : MonoBehaviour
         fieldMenu.SetActive(false);
 
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        string fieldName = fieldNameHolder.GetComponent<Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
         Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
@@ -90,9 +88,9 @@ public class MainGameUI : MonoBehaviour
         fieldMenu.SetActive(false);
 
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        string fieldName = fieldNameHolder.GetComponent<Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
-        Vector3Int fieldCoordinates = new Vector3Int(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]));
+        Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
         bool result = _gameManager.PlantTree(fieldCoordinates);
 
@@ -117,7 +115,7 @@ public class MainGameUI : MonoBehaviour
         fieldMenu.SetActive(false);
 
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        string fieldName = fieldNameHolder.GetComponent<Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
         Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
@@ -157,7 +155,7 @@ public class MainGameUI : MonoBehaviour
         fieldMenu.SetActive(false);
 
         GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<UnityEngine.UI.Text>().text;
+        string fieldName = fieldNameHolder.GetComponent<Text>().text;
         var tmp = fieldName.Split('[', ']')[1].Split(';');
         Vector3Int fieldCoordinates = new Vector3Int(int.Parse(tmp[0]), int.Parse(tmp[1]), int.Parse(tmp[2]));
 
@@ -184,24 +182,26 @@ public class MainGameUI : MonoBehaviour
         if (player.ChangePointOfLights(-1))
             player.ChangeNumberOfSeeds(1);
     }
+
     public void BuySmallTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-2))
             player.ChangeNumberOfSmallTrees(1);
     }
+
     public void BuyMediumTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-3))
             player.ChangeNumberOfMediumTrees(1);
     }
+
     public void BuyBigTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-4))
             player.ChangeNumberOfLargeTrees(1);
-
     }
 
     public void Update() //variables for UI handling. method runs constantly 1/frame, refrashing variable values
@@ -217,6 +217,7 @@ public class MainGameUI : MonoBehaviour
             name3_ui.text = _gameManager._players[2].Nick;
             player3_ui_points.text = _gameManager._players[2].Points + " pkt";
         }
+
         if (_gameManager._players.Count > 3)
         {
             name4_ui.text = _gameManager._players[3].Nick;
@@ -239,15 +240,8 @@ public class MainGameUI : MonoBehaviour
     private void Awake()
     {
         if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
+            Destroy(gameObject);
         else
-        {
             Instance = this;
-        }
     }
-
 }
-
-
