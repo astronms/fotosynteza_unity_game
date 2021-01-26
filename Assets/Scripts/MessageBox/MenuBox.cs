@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class MenuBox : ModalBox
 {
     /// <summary>
-    /// Set this to the name of the prefab that should be loaded when a menu box is shown.
+    ///     Set this to the name of the prefab that should be loaded when a menu box is shown.
     /// </summary>
     [Tooltip("Set this to the name of the prefab that should be loaded when a menu box is shown.")]
     public static string PrefabResourceName = "Menu Box";
@@ -18,8 +17,9 @@ public class MenuBox : ModalBox
     {
         return GameObject.Find("Menu Box(Clone)") != null;
     }
+
     /// <summary>
-    /// Display a menu box.
+    ///     Display a menu box.
     /// </summary>
     /// <param name="options"></param>
     /// <param name="onFinished"></param>
@@ -29,7 +29,7 @@ public class MenuBox : ModalBox
         if (options.Count() != actions.Count())
             throw new Exception("MenuBox.Show must be called with an equal number of options and actions.");
 
-        var box = (Instantiate(Resources.Load<GameObject>(PrefabResourceName)) as GameObject).GetComponent<MenuBox>();
+        var box = Instantiate(Resources.Load<GameObject>(PrefabResourceName)).GetComponent<MenuBox>();
 
         box.SetText(null, title);
         box.SetUpButtons(options, actions);
@@ -37,19 +37,17 @@ public class MenuBox : ModalBox
         return box;
     }
 
-    void SetUpButtons(IEnumerable<string> options, IEnumerable<UnityAction> actions)
+    private void SetUpButtons(IEnumerable<string> options, IEnumerable<UnityAction> actions)
     {
         for (var i = 0; i < options.Count(); i++)
-        {
             CreateButton(Button.gameObject, options.ElementAt(i), actions.ElementAt(i));
-        }
 
         Destroy(Button.gameObject);
     }
 
-    GameObject CreateButton(GameObject buttonToClone, string label, UnityAction action)
+    private GameObject CreateButton(GameObject buttonToClone, string label, UnityAction action)
     {
-        var button = Instantiate(buttonToClone) as GameObject;
+        var button = Instantiate(buttonToClone);
 
         button.GetComponentInChildren<Text>().text = label;
         button.GetComponent<Button>().onClick.AddListener(action);

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UITree : MonoBehaviour
 {
@@ -8,7 +6,7 @@ public class UITree : MonoBehaviour
 
     public static UITree Instance { get; private set; }
 
-    void Start()
+    private void Start()
     {
         DontDestroyOnLoad(transform.gameObject);
     }
@@ -16,22 +14,15 @@ public class UITree : MonoBehaviour
     private void Awake()
     {
         if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
+            Destroy(gameObject);
         else
-        {
             Instance = this;
-        }
     }
 
     public void removeAllTrees()
     {
         GameObject Trees = GameObject.Find("/Trees");
         int childs = Trees.transform.childCount;
-        for (int i = childs - 1; i >= 0; i--)
-        {
-            GameObject.DestroyImmediate(Trees.transform.GetChild(i).gameObject);
-        }
+        for (int i = childs - 1; i >= 0; i--) DestroyImmediate(Trees.transform.GetChild(i).gameObject);
     }
 }

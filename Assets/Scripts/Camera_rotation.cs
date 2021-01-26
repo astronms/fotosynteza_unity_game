@@ -1,18 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Camera_rotation : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    void Start()
+    private void Start()
     {
-        
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         /*
         if (Input.GetKey(KeyCode.UpArrow))
@@ -33,13 +30,13 @@ public class Camera_rotation : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            this.transform.Rotate(Vector3.up, -1);
+            transform.Rotate(Vector3.up, -1);
             MainGameUI.Instance.ExitFieldMenu();
         }
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            this.transform.Rotate(Vector3.up, 1);
+            transform.Rotate(Vector3.up, 1);
             MainGameUI.Instance.ExitFieldMenu();
         }
     }

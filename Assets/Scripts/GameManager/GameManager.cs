@@ -5,13 +5,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // tablica wyszukiwania pól 
+    private readonly Field[,,] _fieldsarray = new Field[7, 7, 7];
     public int _currentPlayerId; //refers to the player who is currently taking his turn
 
     // zbiór pól
     private List<Field> _fields = new List<Field>();
-
-    // tablica wyszukiwania pól 
-    private readonly Field[,,] _fieldsarray = new Field[7, 7, 7];
     private MainGameUI _mainGameUI;
 
     //players 

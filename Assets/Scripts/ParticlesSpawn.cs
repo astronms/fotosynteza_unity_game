@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ParticlesSpawn : MonoBehaviour
 {
-    private ParticleSystem ps;
     public float hSliderValue = 5.0f;
+    private ParticleSystem ps;
 
-    void Start()
+    private void Start()
     {
         ps = GetComponent<ParticleSystem>();
     }
 
-    void Update()
+    private void Update()
     {
         var emission = ps.emission;
         emission.rateOverTime = hSliderValue;

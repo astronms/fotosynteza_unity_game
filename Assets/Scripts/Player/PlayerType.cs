@@ -1,11 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum PlayerType
+﻿public enum PlayerType
 {
     RealPlayer,
     Bot
 }
-
-
