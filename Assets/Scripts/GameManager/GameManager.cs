@@ -324,11 +324,30 @@ public class GameManager : MonoBehaviour
 
     private int GetFieldLevel(Field field)
     {
-        Vector3Int position = field._vector;
-        if (position.x == 0 || position.x == 6 || position.y == 0 || position.y == 6 || position.z == 0 ||
-            position.z == 6)
-            return 1;
-        return 2;
+        Debug.Log("value" + "  " + ((field._vector.x) - 3) + "   " + ((field._vector.y) - 3) + "   " + ((field._vector.z) - 3));
+        int[] array = new int[3] { Math.Abs((field._vector.x)-3), Math.Abs((field._vector.y)-3), Math.Abs((field._vector.z)-3) };
+        int max = array.Max();
+        int value = 0;
+
+        switch (max)
+        {
+            case 0:
+                value = 4;
+                break;
+
+            case 1:
+                value = 3;
+                break;
+
+            case 2:
+                value = 2;
+                break;
+
+            case 3:
+                value = 1;
+                break;
+        }
+        return value;
     }
 
 
@@ -438,6 +457,7 @@ public class GameManager : MonoBehaviour
         field._already_used = true;
         SetNeighborhoodToInactive(field);
         _players[_currentPlayerId].ChangePointOfLights(-4);
+        _players[_currentPlayerId].ChangePoints(GetFieldLevel(field));
         field._assignment = null;
     }
 
