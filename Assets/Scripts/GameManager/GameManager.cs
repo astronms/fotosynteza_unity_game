@@ -478,6 +478,7 @@ public class GameManager : MonoBehaviour
 
     private void FinalRound()
     {
+        AddPointsFromUnusedPointsOfLights();
         var winner = GetWinner(_players);
         ShowResult(winner);
     }
@@ -490,6 +491,13 @@ public class GameManager : MonoBehaviour
         );
     }
 
+    private void AddPointsFromUnusedPointsOfLights()
+    {
+        foreach (var player in _players)
+        {
+            player.ChangePoints(player.PointOfLights % 3);
+        }
+    }
     private string GetWinner(List<Player> players)
     {
         int maxPoints = players.OrderByDescending(p => p.Points).First().Points;
@@ -530,7 +538,7 @@ public class GameManager : MonoBehaviour
     private static string ResultStringForPlayersTie(List<Player> winners)
     {
         var result = winners.OrderByDescending(p => p.Points)
-            .Where(p => p.Points == winners.OrderByDescending(p => p.Points).First().Points);
+            .Where(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points);
         string resultString = null;
         foreach (var winner in result)
         {
