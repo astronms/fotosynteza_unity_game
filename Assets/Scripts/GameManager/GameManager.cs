@@ -366,7 +366,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0)
+                if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0 && field._is_active[_currentPlayerId] == true)
                     return actionType.seed;
             }
 
