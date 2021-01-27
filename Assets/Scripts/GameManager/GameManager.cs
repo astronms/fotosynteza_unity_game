@@ -482,57 +482,40 @@ public class GameManager : MonoBehaviour
         var winner = GetWinner(_players);
         ShowResult(winner);
     }
+
     private void ShowResult(string winner)
     {
         MessageBox.Show(
             "Wygrał " + winner,
             "Gratulacje",
-            (result) => { SceneManager.LoadScene("_START_MENU_SCENE"); }
+            result => { SceneManager.LoadScene("_START_MENU_SCENE"); }
         );
     }
 
     private void AddPointsFromUnusedPointsOfLights()
     {
-        foreach (var player in _players)
-        {
-            player.ChangePoints(player.PointOfLights % 3);
-        }
+        foreach (var player in _players) player.ChangePoints(player.PointOfLights % 3);
     }
+
     private string GetWinner(List<Player> players)
     {
         int maxPoints = players.OrderByDescending(p => p.Points).First().Points;
         List<Player> winners = players.Where(p => p.Points == maxPoints).ToList();
         int winnersCount = winners.Count();
-        if (winnersCount == 1)
-        {
-            return winners.OrderByDescending(p => p.Points).First().Nick;
-        }
-        else
-        {
-            AddAdditionalPoints(winners);
-            if (winners.Any(p => p.Points > 1))
-            {
-                return ResultStringForPlayersTie(winners);
-            }
-            else
-            {
-                return winners.OrderByDescending(p => p.Points).First().Nick;
-            }
-        }
+        if (winnersCount == 1) return winners.OrderByDescending(p => p.Points).First().Nick;
+
+        AddAdditionalPoints(winners);
+        if (winners.Any(p => p.Points > 1))
+            return ResultStringForPlayersTie(winners);
+        return winners.OrderByDescending(p => p.Points).First().Nick;
     }
 
     private void AddAdditionalPoints(List<Player> winners)
     {
         foreach (var winner in winners)
-        {
-            foreach (var field in _fields)
-            {
-                if (winner == field._assignment._player)
-                {
-                    winner.ChangePoints(1);
-                }
-            }
-        }
+        foreach (var field in _fields)
+            if (winner == field._assignment._player)
+                winner.ChangePoints(1);
     }
 
     private static string ResultStringForPlayersTie(List<Player> winners)
@@ -540,10 +523,7 @@ public class GameManager : MonoBehaviour
         var result = winners.OrderByDescending(p => p.Points)
             .Where(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points);
         string resultString = null;
-        foreach (var winner in result)
-        {
-            resultString += " i " + winner.Nick;
-        }
+        foreach (var winner in result) resultString += " i " + winner.Nick;
         return resultString;
     }
 
