@@ -368,7 +368,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0)
+                if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0 && field._is_active[_currentPlayerId] == true)
                     return actionType.seed;
             }
 
@@ -449,7 +449,7 @@ public class GameManager : MonoBehaviour
                 _players[_currentPlayerId].ChangePointOfLights(-3);
                 break;
         }
-
+        SetNeighborhoodToActive(field);
         return field._assignment._treeLevel;
     }
 
@@ -593,5 +593,4 @@ public class GameManager : MonoBehaviour
     {
         return x <= 6 ? x : 6;
     }
-
 }
