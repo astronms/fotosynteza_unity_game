@@ -447,7 +447,7 @@ public class GameManager : MonoBehaviour
                 _players[_currentPlayerId].ChangePointOfLights(-3);
                 break;
         }
-
+        SetNeighborhoodToActive(field);
         return field._assignment._treeLevel;
     }
 
