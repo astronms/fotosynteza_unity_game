@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour
     //players 
     public List<Player> _players = new List<Player>();
 
-    public int _round = 1;
+    public int _round;
 
     // wartość pozycji słońca
     private Sun_Rotation sun_Rotation;
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
         _players = players;
         _fields = new List<Field>();
         _currentPlayerId = 0;
+        _round = 1;
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
     }
 
@@ -46,7 +48,7 @@ public class GameManager : MonoBehaviour
         //Removing all existing trees on UI
         UITree.Instance.removeAllTrees();
         //Generating _fields structure 
-        List<Vector3Int> fieldsCoordinates = _mainGameUI.getListOfFieldsCoordinates();
+        List<Vector3Int> fieldsCoordinates = _mainGameUI.GetListOfFieldsCoordinates();
         foreach (Vector3Int coordinate in fieldsCoordinates)
         {
             Field field = new Field();
@@ -466,8 +468,75 @@ public class GameManager : MonoBehaviour
         FazePhotosynthesis(sun_Rotation.sun_position);
         sun_Rotation.Next_Sun_Position();
         _round++;
+        if (_round == 19)
+        {
+            FinalRound();
+        }
         foreach (var field in _fields)
             field._already_used = false;
+    }
+
+    private void FinalRound()
+    {
+        var winner = GetWinner(_players);
+        ShowResult(winner);
+    }
+    private void ShowResult(string winner)
+    {
+        MessageBox.Show(
+            "Wygrał " + winner,
+            "Gratulacje",
+            (result) => { SceneManager.LoadScene("_START_MENU_SCENE"); }
+        );
+    }
+
+    private string GetWinner(List<Player> players)
+    {
+        int maxPoints = players.OrderByDescending(p => p.Points).First().Points;
+        List<Player> winners = players.Where(p => p.Points == maxPoints).ToList();
+        int winnersCount = winners.Count();
+        if (winnersCount == 1)
+        {
+            return winners.OrderByDescending(p => p.Points).First().Nick;
+        }
+        else
+        {
+            AddAdditionalPoints(winners);
+            if (winners.Any(p => p.Points > 1))
+            {
+                return ResultStringForPlayersTie(winners);
+            }
+            else
+            {
+                return winners.OrderByDescending(p => p.Points).First().Nick;
+            }
+        }
+    }
+
+    private void AddAdditionalPoints(List<Player> winners)
+    {
+        foreach (var winner in winners)
+        {
+            foreach (var field in _fields)
+            {
+                if (winner == field._assignment._player)
+                {
+                    winner.ChangePoints(1);
+                }
+            }
+        }
+    }
+
+    private static string ResultStringForPlayersTie(List<Player> winners)
+    {
+        var result = winners.OrderByDescending(p => p.Points)
+            .Where(p => p.Points == winners.OrderByDescending(p => p.Points).First().Points);
+        string resultString = null;
+        foreach (var winner in result)
+        {
+            resultString += " i " + winner.Nick;
+        }
+        return resultString;
     }
 
     public void EndPlayerTurn()
@@ -524,4 +593,5 @@ public class GameManager : MonoBehaviour
     {
         return x <= 6 ? x : 6;
     }
+
 }

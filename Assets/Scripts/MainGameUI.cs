@@ -41,7 +41,7 @@ public class MainGameUI : MonoBehaviour
         SceneManager.LoadScene("_GAME_MENU_SCENE");
     }
 
-    public List<Vector3Int> getListOfFieldsCoordinates()
+    public List<Vector3Int> GetListOfFieldsCoordinates()
     {
         List<Vector3Int> coordinatesList = new List<Vector3Int>();
         Transform boardTransform = GameObject.Find("Board").transform;
@@ -75,7 +75,7 @@ public class MainGameUI : MonoBehaviour
         }
         else
         {
-            MessageBox.Show("Błąd podczas siania nasiona.", "Błąd");
+            MessageBox.Show("Błąd podczas siania nasiona.","Błąd");
             Debug.Log("Error during sowing seed.");
         }
     }
@@ -114,7 +114,6 @@ public class MainGameUI : MonoBehaviour
     {
         GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
         Destroy(existingTree);
-
     }
 
     public void UpgradeTree()

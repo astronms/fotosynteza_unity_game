@@ -7,7 +7,7 @@ public class Player
         Nick = nick;
         PlayerType = playerType;
         Points = 0;
-        PointOfLights = 100;
+        PointOfLights = 0;
         NumberOfSeeds = 2;
         NumberOfSmallTrees = 4;
         NumberOfMediumTrees = 1;
