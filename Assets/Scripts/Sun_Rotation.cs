@@ -3,15 +3,18 @@ using UnityEngine;
 
 public class Sun_Rotation : MonoBehaviour
 {
+
     [SerializeField] public int sun_position;
+    public static Sun_Rotation Instance { get; private set; }
 
     public Sun_Rotation()
     {
         sun_position = 0;
     }
 
-    private void Update()
+    private void Start()
     {
+        DontDestroyOnLoad(transform.gameObject);
     }
 
     public void Next_Sun_Position()
@@ -39,5 +42,13 @@ public class Sun_Rotation : MonoBehaviour
         transform.rotation = to;
 
         StopAllCoroutines();
+    }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
+        else
+            Instance = this;
     }
 }

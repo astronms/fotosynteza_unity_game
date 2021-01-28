@@ -23,6 +23,7 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Not loaded _defaultColorBlockNick - " + ex);
             }
     }
+
     private static TMP_Dropdown GetDropdownOption(int i, out TMP_InputField nick)
     {
         TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
@@ -66,6 +67,11 @@ public class MainMenu : MonoBehaviour
         {
             GameObject GameUI = GameObject.Find("GameUI");
             Destroy(GameUI);
+        }
+        if (Sun_Rotation.Instance != null)
+        {
+            GameObject sun = GameObject.Find("sun");
+            Destroy(sun);
         }
 
         SceneManager.LoadSceneAsync("_MAIN_SCENE");

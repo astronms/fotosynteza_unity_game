@@ -19,9 +19,6 @@ public class GameManager : MonoBehaviour
 
     public int _round;
 
-    // wartość pozycji słońca
-    private Sun_Rotation sun_Rotation;
-
     private void Start()
     {
         DontDestroyOnLoad(transform.gameObject);
@@ -58,8 +55,6 @@ public class GameManager : MonoBehaviour
 
         //Filling field array to FazePhotosynthesis
         FillFieldArray();
-        //Getting sun_Rotation object
-        sun_Rotation = GameObject.Find("sun").GetComponent<Sun_Rotation>();
     }
 
     public void FazePhotosynthesis(int position)
@@ -465,8 +460,8 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
-        FazePhotosynthesis(sun_Rotation.sun_position);
-        sun_Rotation.Next_Sun_Position();
+        FazePhotosynthesis(Sun_Rotation.Instance.sun_position);
+        Sun_Rotation.Instance.Next_Sun_Position();
         _round++;
         if (_round == 19)
         {
