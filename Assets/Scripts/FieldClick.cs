@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Field;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

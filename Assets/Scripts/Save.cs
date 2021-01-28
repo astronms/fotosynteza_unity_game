@@ -10,7 +10,7 @@ using UnityEngine;
 public class Save
 {
     public List<Player> activePlayers = new List<Player>();
-    //public List<Field> activeFields = new List<Field>();
+    public List<Field> activeFields = new List<Field>();
     public int SunRotation;
     public int round;
     public int activePlayerId;

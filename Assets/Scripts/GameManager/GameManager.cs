@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Assets.Scripts.Field;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -462,6 +461,11 @@ public class GameManager : MonoBehaviour
         {
             FinalRound();
         }
+
+        if (_round == 4)
+        {
+            SaveGame("test");
+        }
         foreach (var field in _fields)
             field._already_used = false;
     }
@@ -581,12 +585,12 @@ public class GameManager : MonoBehaviour
 
         foreach (var field in _fields)
         {
-            //save.activeFields.Add(field);
+            save.activeFields.Add(field);
         }
 
         save.round = _round;
         save.activePlayerId = _currentPlayerId;
-        save.SunRotation = sun_Rotation.sun_position;
+        save.SunRotation = Sun_Rotation.Instance.sun_position;
         return save;
     }
 
@@ -606,10 +610,10 @@ public class GameManager : MonoBehaviour
             _players.Add(savePlayer);
         }
 
-        //foreach (var saveField in save.activeFields)
-        //{
-        //    _fields.Add(saveField);
-        //}
+        foreach (var saveField in save.activeFields)
+        {
+            _fields.Add(saveField);
+        }
 
         sun_Rotation.sun_position = save.SunRotation;
         _round = save.round;
