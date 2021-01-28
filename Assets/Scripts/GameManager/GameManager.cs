@@ -10,19 +10,15 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
     public int _currentPlayerId; //refers to the player who is currently taking his turn
 
     // zbiór pól
-    [SerializeField]
     private List<Field> _fields = new List<Field>();
     private MainGameUI _mainGameUI;
 
     //players 
-    [SerializeField]
     public List<Player> _players = new List<Player>();
 
-    [SerializeField]
     public int _round;
     
     // wartość pozycji słońca
