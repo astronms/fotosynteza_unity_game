@@ -25,14 +25,6 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Not loaded _defaultColorBlockNick - " + ex);
             }
     }
-    private static TMP_Dropdown GetDropdownOption(int i, out TMP_InputField nick)
-    {
-        TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
-            .GetComponent<TMP_Dropdown>();
-        nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
-            .GetComponent<TMP_InputField>();
-        return dropdown;
-    }
 
     /// <summary>
     ///     called when updating the GUI
@@ -66,6 +58,11 @@ public class MainMenu : MonoBehaviour
             GameObject GameUI = GameObject.Find("GameUI");
             Destroy(GameUI);
         }
+        if (Sun_Rotation.Instance != null)
+        {
+            GameObject sun = GameObject.Find("sun");
+            Destroy(sun);
+        }
 
         SceneManager.LoadSceneAsync("_MAIN_SCENE");
         int playerNumber = 0;
@@ -90,6 +87,45 @@ public class MainMenu : MonoBehaviour
         _gameManager.startNewGame(players);
     }
 
+    public void LoadGameSavesToDropdown()
+    {
+        List<string> saves = GetAvailableGameSaves();
+        TMP_Dropdown dropdown = GameObject.Find("/Menu/LoadSaveMenu/Dropdown")
+            .GetComponent<TMP_Dropdown>();
+        if (saves.Count == 0)
+        {
+            saves.Add("Brak");
+            SetButtonInteractable("Menu/LoadSaveMenu/LoadButton", false);
+        }
+        else
+            SetButtonInteractable("Menu/LoadSaveMenu/LoadButton", true);
+        dropdown.ClearOptions();
+        dropdown.AddOptions(saves);
+    }
+
+    public void LoadGameSave()
+    {
+        string save = GetSelectedGameSave();
+        if(save == "Brak")
+            MessageBox.Show("Brak dostępnego zapisu do wczytania.", "Uwaga");
+        else
+        {
+            Debug.Log("Test");
+            //TODO: Define action 
+        }
+    }
+
+    public void SaveGameStatus()
+    {
+        string gameName = GetGameSaveName();
+        if (gameName == "Brak" || gameName == "Nazwa..." || gameName.Length == 0)
+            MessageBox.Show("Nieprawidłowa nazwa zapisu.", "Uwaga");
+        else
+        {
+            //TODO: Define action
+        }
+    }
+
     public void BackToGame()
     {
         SceneManager.LoadScene("_MAIN_SCENE");
@@ -105,5 +141,40 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+
+    private List<string> GetAvailableGameSaves()
+    {
+        return new List<string> {"Zapis 1", "Zapis 2"}; //TODO: define this method to gather game saves
+    }
+
+    private string GetSelectedGameSave()
+    {
+        TMP_Dropdown dropdown = GameObject.Find("Menu/LoadSaveMenu/Dropdown")
+            .GetComponent<TMP_Dropdown>();
+        return dropdown.options[dropdown.value].text;
+    }
+
+    private string GetGameSaveName()
+    {
+        TMP_InputField gameSaveName = GameObject.Find("/Menu/SaveMenu/SaveNameInput")
+            .GetComponent<TMP_InputField>();
+        return gameSaveName.text;
+    }
+
+    private void SetButtonInteractable(string path, bool interactable)
+    {
+        Button button = GameObject.Find(path)
+            .GetComponent<Button>();
+        button.interactable = interactable;
+    }
+
+    private static TMP_Dropdown GetDropdownOption(int i, out TMP_InputField nick)
+    {
+        TMP_Dropdown dropdown = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/PlayerType")
+            .GetComponent<TMP_Dropdown>();
+        nick = GameObject.Find("/Menu/NewGameMenu/Player_" + (i + 1) + "/NickInput")
+            .GetComponent<TMP_InputField>();
+        return dropdown;
+    }
 
 }
