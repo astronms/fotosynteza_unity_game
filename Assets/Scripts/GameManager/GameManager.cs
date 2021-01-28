@@ -179,8 +179,6 @@ public class GameManager : MonoBehaviour
     // weryfikacja możliwych do uzyskania punktów światła dla danego drzewa na względem danego dystansu
     private int FieldVerification(int x, int y, int z, int pointoflightstoadd, int distance, Field field)
     {
-        Debug.Log("SOMETHING" + "  " + field._vector.x + "   " + field._vector.y + "   " + field._vector.z);
-        Debug.Log("something" + "  " + x + "   " + y + "   " + z);
         var result = _fields.Where(f => f._vector.x == x && f._vector.y == y && f._vector.z == z).FirstOrDefault();
 
         if (result._assignment != null)
@@ -321,7 +319,6 @@ public class GameManager : MonoBehaviour
 
     private int GetFieldLevel(Field field)
     {
-        Debug.Log("value" + "  " + ((field._vector.x) - 3) + "   " + ((field._vector.y) - 3) + "   " + ((field._vector.z) - 3));
         int[] array = new int[3] { Math.Abs((field._vector.x)-3), Math.Abs((field._vector.y)-3), Math.Abs((field._vector.z)-3) };
         int max = array.Max();
         int value = 0;
@@ -448,14 +445,21 @@ public class GameManager : MonoBehaviour
         return field._assignment._treeLevel;
     }
 
-    public void CutTree(Vector3Int coordinates)
+    public bool CutTree(Vector3Int coordinates)
     {
         Field field = GetFieldByVector(coordinates);
-        field._already_used = true;
         SetNeighborhoodToInactive(field);
-        _players[_currentPlayerId].ChangePointOfLights(-4);
-        _players[_currentPlayerId].ChangePoints(GetFieldLevel(field));
-        field._assignment = null;
+        if (_players[_currentPlayerId].ChangePointOfLights(-4))
+        {
+            _players[_currentPlayerId].ChangePoints(GetFieldLevel(field));
+            field._assignment = null;
+            field._already_used = true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void NextRound()
@@ -524,6 +528,7 @@ public class GameManager : MonoBehaviour
 
     public void EndPlayerTurn()
     {
+        PlayerMadeMove(false);
         if (_currentPlayerId + 1 < _players.Count)
         {
             _currentPlayerId++;
@@ -534,6 +539,17 @@ public class GameManager : MonoBehaviour
             _currentPlayerId = 0;
         }
     }
+
+    public void PlayerMadeMove(bool move = true)
+    {
+        _players[_currentPlayerId].MadeMove = move;
+    }
+
+    public bool CheckIfPlayerMadeMove()
+    {
+        return _players[_currentPlayerId].MadeMove;
+    }
+
     private IEnumerable<Field> NeighborhoodFields(Field _field)
     {
         return _fields.Where(field =>

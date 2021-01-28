@@ -72,6 +72,7 @@ public class MainGameUI : MonoBehaviour
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
             GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId) as GameObject;
             NewSeedInit(tmps, clickedField, fieldName);
+            _gameManager.PlayerMadeMove();
         }
         else
         {
@@ -90,6 +91,7 @@ public class MainGameUI : MonoBehaviour
             GameObject clickedField = GameObject.Find("/Board/" + fieldName);
             GameObject tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId) as GameObject;
             NewSeedInit(tmps, clickedField, fieldName);
+            _gameManager.PlayerMadeMove();
         }
         else
         {
@@ -145,15 +147,19 @@ public class MainGameUI : MonoBehaviour
                 tree.transform.name = "Tree_" + fieldName.Split('_')[1];
                 break;
         }
+        _gameManager.PlayerMadeMove();
     }
 
 
 
     public void CutTree()
     {
-        string fieldName = GetFieldName(out var fieldCoordinates);
-        DestroyExistingTree(fieldName);
-        _gameManager.CutTree(fieldCoordinates);
+        var fieldName = GetFieldName(out var fieldCoordinates);
+        if ( _gameManager.CutTree(fieldCoordinates))
+        {
+            DestroyExistingTree(fieldName);
+            _gameManager.PlayerMadeMove();
+        }
     }
 
     public void ExitFieldMenu()
@@ -164,35 +170,65 @@ public class MainGameUI : MonoBehaviour
 
     public void EndPlayerTurn()
     {
-        _gameManager.EndPlayerTurn();
+        ExitFieldMenu();
+        if (!_gameManager.CheckIfPlayerMadeMove())
+        {
+            MessageBox.Show
+            (
+                "Nie wykonałeś żadnego ruchu. \nCzy chcesz zakończyć swoją rundę?",
+                "Uwaga",
+                (result) =>
+                {
+                    if (result.ToString() == "Yes")
+                    {
+                        _gameManager.EndPlayerTurn();
+                    }
+                },
+                MessageBoxButtons.YesNo
+            );
+        }
+        else
+            _gameManager.EndPlayerTurn();
     }
 
     public void BuySeed()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-1))
+        {
             player.ChangeNumberOfSeeds(1);
+            _gameManager.PlayerMadeMove();
+        }
     }
 
     public void BuySmallTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-2))
+        {
             player.ChangeNumberOfSmallTrees(1);
+            _gameManager.PlayerMadeMove();
+        }
     }
 
     public void BuyMediumTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-3))
+        {
             player.ChangeNumberOfMediumTrees(1);
+            _gameManager.PlayerMadeMove();
+        }
     }
 
     public void BuyBigTree()
     {
         Player player = _gameManager._players[_gameManager._currentPlayerId];
         if (player.ChangePointOfLights(-4))
+        {
             player.ChangeNumberOfLargeTrees(1);
+            _gameManager.PlayerMadeMove();
+        }
     }
 
     public void Update() //variables for UI handling. method runs constantly 1/frame, refrashing variable values

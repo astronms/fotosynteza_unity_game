@@ -108,7 +108,6 @@ public class MainMenu : MonoBehaviour
             MessageBox.Show("Brak dostępnego zapisu do wczytania.", "Uwaga");
         else
         {
-            Debug.Log("Test");
             //TODO: Define action 
         }
     }

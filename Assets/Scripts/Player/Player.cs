@@ -12,6 +12,7 @@ public class Player
         NumberOfSmallTrees = 4;
         NumberOfMediumTrees = 1;
         NumberOfLargeTrees = 0;
+        MadeMove = false;
     }
 
     public int Id { get; }
@@ -23,6 +24,7 @@ public class Player
     public int NumberOfSmallTrees { get; private set; }
     public int NumberOfMediumTrees { get; private set; }
     public int NumberOfLargeTrees { get; private set; }
+    public bool MadeMove { get; set; }
 
     public bool ChangePoints(int x)
     {
@@ -56,7 +58,7 @@ public class Player
             NumberOfSmallTrees += x;
             return true;
         }
-
+        
         MessageBox.Show("Nie masz wystarczająco małych drzew", "Uwaga");
         Debug.Log("Not enough NumberOfSmallTrees");
         return false;
