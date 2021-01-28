@@ -110,7 +110,7 @@ public class MainMenu : MonoBehaviour
             MessageBox.Show("Brak dostępnego zapisu do wczytania.", "Uwaga");
         else
         {
-            //TODO: Define action 
+            LoadGame(save);
         }
     }
 
@@ -121,7 +121,7 @@ public class MainMenu : MonoBehaviour
             MessageBox.Show("Nieprawidłowa nazwa zapisu.", "Uwaga");
         else
         {
-            //TODO: Define action
+            SaveGame(gameName);
         }
     }
 
@@ -140,10 +140,46 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    private void SaveGame(string fileName)
+    {
+        Save save = _gameManager.CreateSaveGameObject();
 
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/" + fileName + ".save");
+        bf.Serialize(file, save);
+        file.Close();
+
+        Debug.Log("Game Saved");
+    }
+
+    private void LoadGame(string fileName)
+    {
+        string savePath = Application.persistentDataPath + "/" + fileName + ".save";
+        if (File.Exists(savePath))
+        {
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(savePath, FileMode.Open);
+            Save save = (Save)bf.Deserialize(file);
+            file.Close();
+            _gameManager.LoadSaveGameObject(save);
+            Debug.Log("Game Loaded");
+        }
+        else
+        {
+            Debug.Log("No game saved!");
+        }
+    }
     private List<string> GetAvailableGameSaves()
     {
-        return new List<string> {"Zapis 1", "Zapis 2"}; //TODO: define this method to gather game saves
+        DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath);
+        FileInfo[] files = dir.GetFiles("*.save");
+        List<string> stringFiles = new List<string>();
+        foreach (var file in files)
+        {
+            stringFiles.Add(file.Name.ToString().Replace(".save",""));
+        }
+        return stringFiles; 
     }
 
     private string GetSelectedGameSave()

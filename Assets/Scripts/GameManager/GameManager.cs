@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -303,7 +301,7 @@ public class GameManager : MonoBehaviour
     private Field GetFieldByVector(FieldVector vector)
     {
         foreach (Field field in _fields)
-            if (field._vector == vector)
+            if (field._vector.Equals(vector))
                 return field;
         return null;
     }
@@ -623,38 +621,9 @@ public class GameManager : MonoBehaviour
             _fields.Add(saveField);
         }
 
-        sun_Rotation.sun_position = save.SunRotation;
+        Sun_Rotation.Instance.sun_position = save.SunRotation;
         _round = save.round;
         _currentPlayerId = save.activePlayerId;
     }
-    public void SaveGame(string fileName)
-    {
-        Save save = CreateSaveGameObject();
 
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/" + fileName + ".save");
-        bf.Serialize(file, save);
-        file.Close();
-
-        Debug.Log("Game Saved");
-    }
-
-    public void LoadGame(string fileName)
-    {
-        string savePath = Application.persistentDataPath + "/saves/" + fileName + ".save";
-        if (File.Exists(savePath))
-        {
-
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(savePath, FileMode.Open);
-            Save save = (Save)bf.Deserialize(file);
-            file.Close();
-            LoadSaveGameObject(save);
-            Debug.Log("Game Loaded");
-        }
-        else
-        {
-            Debug.Log("No game saved!");
-        }
-    }
 }
