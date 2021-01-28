@@ -8,6 +8,7 @@ public class Sun_Rotation : MonoBehaviour
     [SerializeField] 
     public int sun_position;
     public static Sun_Rotation Instance { get; private set; }
+    private GameManager _gameManager;
 
     public Sun_Rotation()
     {
@@ -16,6 +17,13 @@ public class Sun_Rotation : MonoBehaviour
 
     private void Start()
     {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        int value;
+        if (_gameManager.PendingLoad.TryGetValue("sun_position", out value))
+        {
+            sun_position = value;
+            _gameManager.PendingLoad.Remove("sun_position");
+        }
         DontDestroyOnLoad(transform.gameObject);
     }
 

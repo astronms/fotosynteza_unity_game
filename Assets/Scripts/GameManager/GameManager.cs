@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     public int _round;
 
+    public Dictionary<string, int> PendingLoad = new Dictionary<string, int>();
+
     private void Start()
     {
         DontDestroyOnLoad(transform.gameObject);
@@ -621,7 +623,10 @@ public class GameManager : MonoBehaviour
             _fields.Add(saveField);
         }
 
-        Sun_Rotation.Instance.sun_position = save.SunRotation;
+        if(Sun_Rotation.Instance == null)
+            PendingLoad.Add("sun_position", save.SunRotation);
+        else
+            Sun_Rotation.Instance.sun_position = save.SunRotation;
         _round = save.round;
         _currentPlayerId = save.activePlayerId;
     }
