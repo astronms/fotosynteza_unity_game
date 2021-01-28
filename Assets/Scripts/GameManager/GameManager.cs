@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using Assets.Scripts.Field;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
 public class GameManager : MonoBehaviour
 {
-    // tablica wyszukiwania pól 
-    private readonly Field[,,] _fieldsarray = new Field[7, 7, 7];
+    [SerializeField]
     public int _currentPlayerId; //refers to the player who is currently taking his turn
 
     // zbiór pól
+    [SerializeField]
     private List<Field> _fields = new List<Field>();
     private MainGameUI _mainGameUI;
 
     //players 
+    [SerializeField]
     public List<Player> _players = new List<Player>();
 
+    [SerializeField]
     public int _round;
-
+    
     // wartość pozycji słońca
     private Sun_Rotation sun_Rotation;
 
@@ -40,24 +46,20 @@ public class GameManager : MonoBehaviour
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
     }
 
-    public void
-        MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
+    public void MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
     {
         _mainGameUI = MainGameUI.Instance;
 
         //Removing all existing trees on UI
         UITree.Instance.removeAllTrees();
         //Generating _fields structure 
-        List<Vector3Int> fieldsCoordinates = _mainGameUI.GetListOfFieldsCoordinates();
-        foreach (Vector3Int coordinate in fieldsCoordinates)
+        List<FieldVector> _fieldsCoordinates = _mainGameUI.GetListOfFieldsCoordinates();
+        foreach (FieldVector coordinate in _fieldsCoordinates)
         {
             Field field = new Field();
             field._vector = coordinate;
             _fields.Add(field);
         }
-
-        //Filling field array to FazePhotosynthesis
-        FillFieldArray();
         //Getting sun_Rotation object
         sun_Rotation = GameObject.Find("sun").GetComponent<Sun_Rotation>();
     }
@@ -309,14 +311,7 @@ public class GameManager : MonoBehaviour
         return pointoflightstoadd;
     }
 
-    // przypisywanie listy pól do tablicy wyszukiwania pól
-    public void FillFieldArray()
-    {
-        foreach (Field field in _fields)
-            _fieldsarray[field._vector.x, field._vector.y, field._vector.z] = field;
-    }
-
-    private Field GetFieldByVector(Vector3Int vector)
+    private Field GetFieldByVector(FieldVector vector)
     {
         foreach (Field field in _fields)
             if (field._vector == vector)
@@ -353,7 +348,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public actionType AvailableActionOnField(Vector3Int vector)
+    public actionType AvailableActionOnField(FieldVector vector)
     {
         Field field = GetFieldByVector(vector);
         if (field._already_used)
@@ -397,7 +392,7 @@ public class GameManager : MonoBehaviour
         return actionType.none;
     }
 
-    public bool AddSeed(Vector3Int coordinates)
+    public bool AddSeed(FieldVector coordinates)
     {
         Field field = GetFieldByVector(coordinates);
 
@@ -412,7 +407,7 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public bool PlantTree(Vector3Int coordinates)
+    public bool PlantTree(FieldVector coordinates)
     {
         Field field = GetFieldByVector(coordinates);
 
@@ -427,7 +422,7 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public TreeObject.TreeLvl UpgradeTree(Vector3Int coordinates)
+    public TreeObject.TreeLvl UpgradeTree(FieldVector coordinates)
     {
         Field field = GetFieldByVector(coordinates);
 
@@ -453,7 +448,7 @@ public class GameManager : MonoBehaviour
         return field._assignment._treeLevel;
     }
 
-    public void CutTree(Vector3Int coordinates)
+    public void CutTree(FieldVector coordinates)
     {
         Field field = GetFieldByVector(coordinates);
         field._already_used = true;
@@ -580,5 +575,79 @@ public class GameManager : MonoBehaviour
     private int MaxVal(int x)
     {
         return x <= 6 ? x : 6;
+    }
+    public Save CreateSaveGameObject()
+    {
+        Save save = new Save();
+        foreach (var player in _players)
+        {
+            save.activePlayers.Add(player);
+        }
+
+        foreach (var field in _fields)
+        {
+            //save.activeFields.Add(field);
+        }
+
+        save.round = _round;
+        save.activePlayerId = _currentPlayerId;
+        save.SunRotation = sun_Rotation.sun_position;
+        return save;
+    }
+
+    private void ClearGame()
+    {
+        _players.Clear();
+        _fields.Clear();
+        _currentPlayerId = 0;
+        _round = 1;
+
+    }
+    public void LoadSaveGameObject(Save save)
+    {
+        ClearGame();
+        foreach (var savePlayer in save.activePlayers)
+        {
+            _players.Add(savePlayer);
+        }
+
+        //foreach (var saveField in save.activeFields)
+        //{
+        //    _fields.Add(saveField);
+        //}
+
+        sun_Rotation.sun_position = save.SunRotation;
+        _round = save.round;
+        _currentPlayerId = save.activePlayerId;
+    }
+    public void SaveGame(string fileName)
+    {
+        Save save = CreateSaveGameObject();
+
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/" + fileName + ".save");
+        bf.Serialize(file, save);
+        file.Close();
+
+        Debug.Log("Game Saved");
+    }
+
+    public void LoadGame(string fileName)
+    {
+        string savePath = Application.persistentDataPath + "/saves/" + fileName + ".save";
+        if (File.Exists(savePath))
+        {
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(savePath, FileMode.Open);
+            Save save = (Save)bf.Deserialize(file);
+            file.Close();
+            LoadSaveGameObject(save);
+            Debug.Log("Game Loaded");
+        }
+        else
+        {
+            Debug.Log("No game saved!");
+        }
     }
 }

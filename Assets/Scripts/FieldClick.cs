@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Field;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -25,7 +26,7 @@ public class FieldClick : MonoBehaviour
         if (name == "Cylinder" && !IsPointerOverUIElement())
         {
             var tmp = field.name.Split('[', ']')[1].Split(';');
-            Vector3Int fieldCoordinates = Field.GetCoordinates(tmp);
+            FieldVector fieldCoordinates = Field.GetCoordinates(tmp);
             actionType action = _gameManager.AvailableActionOnField(fieldCoordinates);
 
             GameObject updateButton = GameObject.Find("/GameUI/FieldMenu/Panel/UpgradeTreeButton");

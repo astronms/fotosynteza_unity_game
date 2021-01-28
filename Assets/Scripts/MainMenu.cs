@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -57,9 +59,6 @@ public class MainMenu : MonoBehaviour
             }
     }
 
-
-
-
     public void NewGame()
     {
         if (MainGameUI.Instance != null)
@@ -105,4 +104,6 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+
 }

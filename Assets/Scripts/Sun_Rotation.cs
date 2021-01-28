@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[System.Serializable]
 public class Sun_Rotation : MonoBehaviour
 {
-    [SerializeField] public int sun_position;
+    [SerializeField] 
+    public int sun_position;
 
     public Sun_Rotation()
     {
