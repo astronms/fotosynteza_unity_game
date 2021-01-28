@@ -41,14 +41,14 @@ public class MainGameUI : MonoBehaviour
         SceneManager.LoadScene("_GAME_MENU_SCENE");
     }
 
-    public List<Vector3Int> GetListOfFieldsCoordinates()
+    public List<FieldVector> GetListOfFieldsCoordinates()
     {
-        List<Vector3Int> coordinatesList = new List<Vector3Int>();
+        List<FieldVector> coordinatesList = new List<FieldVector>();
         Transform boardTransform = GameObject.Find("Board").transform;
         foreach (Transform child in boardTransform)
         {
             var tmp = child.name.Split('[', ']')[1].Split(';');
-            Vector3Int fieldCoordinates = Field.GetCoordinates(tmp);
+            FieldVector fieldCoordinates = Field.GetCoordinates(tmp);
             coordinatesList.Add(fieldCoordinates);
         }
 
@@ -100,7 +100,7 @@ public class MainGameUI : MonoBehaviour
         }
     }
 
-    private static string GetFieldName(out Vector3Int fieldCoordinates)
+    private static string GetFieldName(out FieldVector fieldCoordinates)
     {
         GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
         fieldMenu.SetActive(false);

@@ -1,4 +1,5 @@
-﻿public class TreeObject
+﻿[System.Serializable]
+public class TreeObject
 {
     public enum TreeLvl
     {
