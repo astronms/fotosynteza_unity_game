@@ -54,16 +54,7 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
-        if (MainGameUI.Instance != null)
-        {
-            GameObject GameUI = GameObject.Find("GameUI");
-            Destroy(GameUI);
-        }
-        if (Sun_Rotation.Instance != null)
-        {
-            GameObject sun = GameObject.Find("sun");
-            Destroy(sun);
-        }
+        DestroyInstances();
 
         SceneManager.LoadSceneAsync("_MAIN_SCENE");
         int playerNumber = 0;
@@ -88,6 +79,21 @@ public class MainMenu : MonoBehaviour
         _gameManager.startNewGame(players);
     }
 
+    private static void DestroyInstances()
+    {
+        if (MainGameUI.Instance != null)
+        {
+            GameObject GameUI = GameObject.Find("GameUI");
+            Destroy(GameUI);
+        }
+
+        if (Sun_Rotation.Instance != null)
+        {
+            GameObject sun = GameObject.Find("sun");
+            Destroy(sun);
+        }
+    }
+
     public void LoadGameSavesToDropdown()
     {
         List<string> saves = GetAvailableGameSaves();
@@ -99,7 +105,10 @@ public class MainMenu : MonoBehaviour
             SetButtonInteractable("Menu/LoadSaveMenu/LoadButton", false);
         }
         else
+        {
             SetButtonInteractable("Menu/LoadSaveMenu/LoadButton", true);
+        }
+
         dropdown.ClearOptions();
         dropdown.AddOptions(saves);
     }
@@ -107,20 +116,13 @@ public class MainMenu : MonoBehaviour
     public void LoadGameSave()
     {
         string save = GetSelectedGameSave();
-        if(save == "Brak")
+        if (save == "Brak")
+        {
             MessageBox.Show("Brak dostępnego zapisu do wczytania.", "Uwaga");
+        }
         else
         {
-            if (MainGameUI.Instance != null)
-            {
-                GameObject GameUI = GameObject.Find("GameUI");
-                Destroy(GameUI);
-            }
-            if (Sun_Rotation.Instance != null)
-            {
-                GameObject sun = GameObject.Find("sun");
-                Destroy(sun);
-            }
+            DestroyInstances();
 
             SceneManager.LoadSceneAsync("_MAIN_SCENE");
             LoadGame(save);
@@ -133,9 +135,7 @@ public class MainMenu : MonoBehaviour
         if (gameName == "Brak" || gameName == "Nazwa..." || gameName.Length == 0)
             MessageBox.Show("Nieprawidłowa nazwa zapisu.", "Uwaga");
         else
-        {
             SaveGame(gameName);
-        }
     }
 
     public void BackToGame()
@@ -145,18 +145,17 @@ public class MainMenu : MonoBehaviour
 
     public void OpenRanking()
     {
-
         if (File.Exists(Application.persistentDataPath + "/ranking.bin"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/ranking.bin", FileMode.Open);
             Ranking ranking = new Ranking();
-            ranking = (Ranking)bf.Deserialize(file);
-            string winnersString=String.Empty;
+            ranking = (Ranking) bf.Deserialize(file);
+            string winnersString = string.Empty;
             int i = 1;
-            foreach (Player winner in ranking.winnersList.OrderByDescending(w=>w.Points))
+            foreach (Player winner in ranking.winnersList.OrderByDescending(w => w.Points))
             {
-                winnersString += "Miejsce "+i+ ": "+ winner.Nick + " - "+ winner.Points+"pkt \n";
+                winnersString += "Miejsce " + i + ": " + winner.Nick + " - " + winner.Points + "pkt \n";
                 i++;
             }
 
@@ -164,9 +163,10 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            MessageBox.Show(" Zagraj w grę!","Ranking jeszcze nie istnieje");
+            MessageBox.Show(" Zagraj w grę!", "Ranking jeszcze nie istnieje");
         }
     }
+
     public void OpenTutorial()
     {
         Application.OpenURL("https://portalgames.blob.core.windows.net/fotosynteza/Fotosynteza-Instrukcja.pdf");
@@ -194,10 +194,9 @@ public class MainMenu : MonoBehaviour
         string savePath = Application.persistentDataPath + "/" + fileName + ".save";
         if (File.Exists(savePath))
         {
-
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(savePath, FileMode.Open);
-            Save save = (Save)bf.Deserialize(file);
+            Save save = (Save) bf.Deserialize(file);
             file.Close();
             _gameManager.LoadSaveGameObject(save);
             Debug.Log("Game Loaded");
@@ -207,16 +206,14 @@ public class MainMenu : MonoBehaviour
             Debug.Log("No game saved!");
         }
     }
+
     private List<string> GetAvailableGameSaves()
     {
         DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath);
         FileInfo[] files = dir.GetFiles("*.save");
         List<string> stringFiles = new List<string>();
-        foreach (var file in files)
-        {
-            stringFiles.Add(file.Name.ToString().Replace(".save",""));
-        }
-        return stringFiles; 
+        foreach (var file in files) stringFiles.Add(file.Name.Replace(".save", ""));
+        return stringFiles;
     }
 
     private string GetSelectedGameSave()
@@ -248,5 +245,4 @@ public class MainMenu : MonoBehaviour
             .GetComponent<TMP_InputField>();
         return dropdown;
     }
-
 }

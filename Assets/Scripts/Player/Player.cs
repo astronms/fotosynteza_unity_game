@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class Player
 {
     public Player(int id, string nick, PlayerType playerType)
@@ -35,6 +36,7 @@ public class Player
             Points += x;
             return true;
         }
+
         MessageBox.Show("Nie masz wystarczająco punktów", "Uwaga");
         Debug.Log("Not enough Points");
         return false;
@@ -60,7 +62,7 @@ public class Player
             NumberOfSmallTrees += x;
             return true;
         }
-        
+
         MessageBox.Show("Nie masz wystarczająco małych drzew", "Uwaga");
         Debug.Log("Not enough NumberOfSmallTrees");
         return false;

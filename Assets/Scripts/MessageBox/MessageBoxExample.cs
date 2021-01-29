@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.Events;
-using System.Text.RegularExpressions;
-using System;
 
 public class MessageBoxExample : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
         // Remove any testing copies of the prefabs.
         var messageBox = GameObject.Find("Message Box");
@@ -20,7 +17,8 @@ public class MessageBoxExample : MonoBehaviour
 
     public void Test()
     {
-        MessageBox.Show("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        MessageBox.Show(
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
     }
 
     public void TestWithTitle()
@@ -33,7 +31,7 @@ public class MessageBoxExample : MonoBehaviour
         MessageBox.Show(
             "This is a message with a callback.",
             "Message Box Callback Example",
-            (result) => { MessageBox.Show("You Clicked " + result.ToString(), "Dialog Result"); }
+            result => { MessageBox.Show("You Clicked " + result, "Dialog Result"); }
         );
     }
 
@@ -43,7 +41,7 @@ public class MessageBoxExample : MonoBehaviour
         (
             "Are you sure you wish to delete your save game?",
             "Delete Save",
-            (result) => { MessageBox.Show("You Clicked " + result.ToString(), "Dialog Result"); },
+            result => { MessageBox.Show("You Clicked " + result, "Dialog Result"); },
             MessageBoxButtons.OKCancel
         );
     }
@@ -54,7 +52,7 @@ public class MessageBoxExample : MonoBehaviour
         (
             "This is a message with a set of buttons selected.",
             "Message Box Buttons Example",
-            (result) => { MessageBox.Show("You Clicked " + result.ToString(), "Dialog Result"); },
+            result => { MessageBox.Show("You Clicked " + result, "Dialog Result"); },
             MessageBoxButtons.RetryCancel
         );
     }
@@ -65,7 +63,7 @@ public class MessageBoxExample : MonoBehaviour
         (
             "Give us five stars?",
             "Review Game",
-            (result) => { MessageBox.Show("You Clicked " + result.ToString(), "Dialog Result"); },
+            result => { MessageBox.Show("You Clicked " + result, "Dialog Result"); },
             MessageBoxButtons.YesNo
         );
     }
@@ -76,7 +74,7 @@ public class MessageBoxExample : MonoBehaviour
         (
             "This is a message with a set of buttons selected.",
             "Message Box Buttons Example",
-            (result) => { MessageBox.Show("You Clicked " + result.ToString(), "Dialog Result"); },
+            result => { MessageBox.Show("You Clicked " + result, "Dialog Result"); },
             MessageBoxButtons.YesNoCancel
         );
     }
@@ -87,7 +85,7 @@ public class MessageBoxExample : MonoBehaviour
         (
             "Not ready reading drive A",
             "Message Box Buttons Example",
-            (result) => { MessageBox.Show("You Clicked " + result.ToString(), "Dialog Result"); },
+            result => { MessageBox.Show("You Clicked " + result, "Dialog Result"); },
             MessageBoxButtons.AbortRetryIgnore
         );
     }
@@ -96,13 +94,13 @@ public class MessageBoxExample : MonoBehaviour
     {
         MenuBox.Show
         (
-            new string[]
+            new[]
             {
                 "Option 1\nOption description can go here.",
                 "Option 2\nTwo",
                 "Option 3\nThree",
                 "Option 4\nFour",
-                "Option 5\nFive of Nine?",
+                "Option 5\nFive of Nine?"
             },
             new UnityAction[]
             {
@@ -110,7 +108,7 @@ public class MessageBoxExample : MonoBehaviour
                 () => MessageBox.Show("You clicked on Option 2"),
                 () => MessageBox.Show("You clicked on Option 3"),
                 () => MessageBox.Show("You clicked on Option 4"),
-                () => MessageBox.Show("You clicked on Option 5"),
+                () => MessageBox.Show("You clicked on Option 5")
             }
         );
     }
@@ -119,7 +117,7 @@ public class MessageBoxExample : MonoBehaviour
     {
         MenuBox.Show
         (
-            new string[]
+            new[]
             {
                 "Option 1",
                 "Option 2",
@@ -130,7 +128,7 @@ public class MessageBoxExample : MonoBehaviour
                 "Option 7",
                 "Option 8",
                 "Option 9",
-                "Show an even bigger menu!",
+                "Show an even bigger menu!"
             },
             new UnityAction[]
             {
@@ -143,7 +141,7 @@ public class MessageBoxExample : MonoBehaviour
                 () => MessageBox.Show("You clicked on Option 7"),
                 () => MessageBox.Show("You clicked on Option 8"),
                 () => MessageBox.Show("You clicked on Option 9"),
-                TestMenu15,
+                TestMenu15
             },
             "Ten Item Test Menu"
         );
@@ -153,7 +151,7 @@ public class MessageBoxExample : MonoBehaviour
     {
         MenuBox.Show
         (
-            new string[]
+            new[]
             {
                 "Option 1",
                 "Option 2",
@@ -169,7 +167,7 @@ public class MessageBoxExample : MonoBehaviour
                 "Option 12",
                 "Option 13",
                 "Option 14",
-                "Option 15",
+                "Option 15"
             },
             new UnityAction[]
             {
@@ -187,7 +185,7 @@ public class MessageBoxExample : MonoBehaviour
                 () => MessageBox.Show("You clicked on Option 12"),
                 () => MessageBox.Show("You clicked on Option 13"),
                 () => MessageBox.Show("You clicked on Option 14"),
-                () => MessageBox.Show("You clicked on Option 15"),
+                () => MessageBox.Show("You clicked on Option 15")
             },
             "Fifteen Item Test Menu"
         );
@@ -198,7 +196,7 @@ public class MessageBoxExample : MonoBehaviour
         var originalLocalizeFunction = MessageBox.Localize;
 
         MessageBox.Localize =
-            (originalString) =>
+            originalString =>
             {
                 // You would normally hook into your existing localization system here to lookup and return a translated string using the original as a key.
                 // For instance using "Localization package" from the asset store you would do this:
@@ -209,12 +207,13 @@ public class MessageBoxExample : MonoBehaviour
                 // This function only needs to be set once at game startup.
 
                 // For test example replace the original string with X's, so "Hello World" becomes "XXXXXXXXXXX"
-                return new String('X', originalString.Length);
+                return new string('X', originalString.Length);
             };
 
         // Set LocalizeTitleAndMessage to true to send the title and message of message boxes and menus thru the Localize function.
         // MessageBox.LocalizeTitleAndMessage = true;
 
-        MessageBox.Show("Button Localization Test", (result) => { MessageBox.Localize = originalLocalizeFunction; }, MessageBoxButtons.AbortRetryIgnore);
+        MessageBox.Show("Button Localization Test", result => { MessageBox.Localize = originalLocalizeFunction; },
+            MessageBoxButtons.AbortRetryIgnore);
     }
 }

@@ -1,19 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class Sun_Rotation : MonoBehaviour
 {
-
-    [SerializeField] 
-    public int sun_position;
-    public static Sun_Rotation Instance { get; private set; }
     private GameManager _gameManager;
+
+    [SerializeField] public int sun_position;
 
     public Sun_Rotation()
     {
         sun_position = 0;
     }
+
+    public static Sun_Rotation Instance { get; private set; }
 
     private void Start()
     {
@@ -23,11 +24,9 @@ public class Sun_Rotation : MonoBehaviour
         {
             sun_position = value;
             _gameManager.PendingLoad.Remove("sun_position");
-            for (int i = 0; i < sun_position; i++)
-            {
-                StartCoroutine(Rotate(Vector3.up, 60, 0f));
-            }
+            for (int i = 0; i < sun_position; i++) StartCoroutine(Rotate(Vector3.up, 60, 0f));
         }
+
         DontDestroyOnLoad(transform.gameObject);
     }
 

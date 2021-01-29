@@ -67,7 +67,6 @@ public class FieldClick : MonoBehaviour
     }
 
 
-
     private static bool IsPointerOverUIElement()
     {
         return IsPointerOverUIElement(GetEventSystemRaycastResults());

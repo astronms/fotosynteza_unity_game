@@ -65,7 +65,7 @@ public class MainGameUI : MonoBehaviour
         }
         else
         {
-            MessageBox.Show("Błąd podczas siania nasiona.","Błąd");
+            MessageBox.Show("Błąd podczas siania nasiona.", "Błąd");
             Debug.Log("Error during sowing seed.");
         }
     }
@@ -92,15 +92,10 @@ public class MainGameUI : MonoBehaviour
     }
 
 
-
     public void CutTree()
     {
         string fieldName = GetFieldName(out var fieldCoordinates);
-        if (_gameManager.CutTree(fieldCoordinates))
-        {
-
-            _gameManager.PlayerMadeMove();
-        }
+        if (_gameManager.CutTree(fieldCoordinates)) _gameManager.PlayerMadeMove();
     }
 
     public void ExitFieldMenu()
@@ -113,21 +108,16 @@ public class MainGameUI : MonoBehaviour
     {
         ExitFieldMenu();
         if (!_gameManager.CheckIfPlayerMadeMove())
-        {
             MessageBox.Show
             (
                 "Nie wykonałeś żadnego ruchu. \nCzy chcesz zakończyć swoją rundę?",
                 "Uwaga",
-                (result) =>
+                result =>
                 {
-                    if (result.ToString() == "Yes")
-                    {
-                        _gameManager.EndPlayerTurn();
-                    }
+                    if (result.ToString() == "Yes") _gameManager.EndPlayerTurn();
                 },
                 MessageBoxButtons.YesNo
             );
-        }
         else
             _gameManager.EndPlayerTurn();
     }
@@ -213,19 +203,12 @@ public class MainGameUI : MonoBehaviour
     {
         List<GameObject> allChildren = new List<GameObject>();
 
-        foreach (Transform child in _treesGroup.transform)
-        {
-            allChildren.Add(child.gameObject);
-        }
+        foreach (Transform child in _treesGroup.transform) allChildren.Add(child.gameObject);
 
         //Now destroy them
-        foreach (GameObject child in allChildren)
-        {
-            DestroyImmediate(child.gameObject);
-        }
+        foreach (GameObject child in allChildren) DestroyImmediate(child.gameObject);
 
         foreach (var field in _gameManager._fields)
-        {
             if (field._assignment != null)
             {
                 int idOwner = field._assignment._player.Id;
@@ -261,7 +244,6 @@ public class MainGameUI : MonoBehaviour
                         break;
                 }
             }
-        }
     }
 
     private static string GetFieldName(out FieldVector fieldCoordinates)
