@@ -25,7 +25,7 @@ public class Sun_Rotation : MonoBehaviour
             _gameManager.PendingLoad.Remove("sun_position");
             for (int i = 0; i < sun_position; i++)
             {
-                StartCoroutine(Rotate(Vector3.up, 60));
+                StartCoroutine(Rotate(Vector3.up, 60, 0f));
             }
         }
         DontDestroyOnLoad(transform.gameObject);
