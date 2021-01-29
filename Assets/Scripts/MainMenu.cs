@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
@@ -145,11 +146,21 @@ public class MainMenu : MonoBehaviour
     public void OpenRanking()
     {
 
-        if (File.Exists(Application.persistentDataPath + "ranking"))
+        if (File.Exists(Application.persistentDataPath + "/ranking.bin"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "ranking", FileMode.Open);
-            //TODO: Read list
+            FileStream file = File.Open(Application.persistentDataPath + "/ranking.bin", FileMode.Open);
+            Ranking ranking = new Ranking();
+            ranking = (Ranking)bf.Deserialize(file);
+            string winnersString=String.Empty;
+            int i = 1;
+            foreach (Player winner in ranking.winnersList.OrderByDescending(w=>w.Points))
+            {
+                winnersString += "Miejsce "+i+ ": "+ winner.Nick + " - "+ winner.Points+"pkt \n";
+                i++;
+            }
+
+            MessageBox.Show(winnersString);
         }
         else
         {

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
@@ -310,7 +314,7 @@ public class GameManager : MonoBehaviour
 
     private int GetFieldLevel(Field field)
     {
-        int[] array = new int[3] { Math.Abs((field._vector.x)-3), Math.Abs((field._vector.y)-3), Math.Abs((field._vector.z)-3) };
+        int[] array = new int[3] { Math.Abs((field._vector.x) - 3), Math.Abs((field._vector.y) - 3), Math.Abs((field._vector.z) - 3) };
         int max = array.Max();
         int value = 0;
 
@@ -458,7 +462,7 @@ public class GameManager : MonoBehaviour
         FazePhotosynthesis(Sun_Rotation.Instance.sun_position);
         Sun_Rotation.Instance.Next_Sun_Position();
         _round++;
-        if (_round == 19)
+        if (_round == 2)
         {
             FinalRound();
         }
@@ -492,28 +496,66 @@ public class GameManager : MonoBehaviour
         int maxPoints = players.OrderByDescending(p => p.Points).First().Points;
         List<Player> winners = players.Where(p => p.Points == maxPoints).ToList();
         int winnersCount = winners.Count();
-        if (winnersCount == 1) return winners.OrderByDescending(p => p.Points).First().Nick;
-
+        if (winnersCount == 1)
+        {
+            SaveDataForRanking(winners.OrderByDescending(p => p.Points).First());
+            return winners.OrderByDescending(p => p.Points).First().Nick;
+        }
         AddAdditionalPoints(winners);
-        if (winners.Any(p => p.Points > 1))
+        if (winners.OrderByDescending(p => p.Points).Count(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points) > 1)
             return ResultStringForPlayersTie(winners);
+        SaveDataForRanking(winners.OrderByDescending(p => p.Points).First());
         return winners.OrderByDescending(p => p.Points).First().Nick;
+    }
+
+    private static void SaveDataForRanking(Player player)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        Ranking ranking = new Ranking();
+        if (File.Exists(Application.persistentDataPath + "/ranking.bin"))
+        {
+            FileStream file = File.Open(Application.persistentDataPath + "/ranking.bin", FileMode.Open);
+            ranking = (Ranking) bf.Deserialize(file);
+            file.Close();
+            File.Delete(Application.persistentDataPath + "/ranking.bin");
+            FileStream fileFinal = File.Create(Application.persistentDataPath + "/ranking.bin");
+            BinaryFormatter bf1 = new BinaryFormatter();
+            ranking.winnersList.Add(player);
+            bf1.Serialize(fileFinal, ranking);
+            fileFinal.Close();
+        }
+        else
+        {
+            FileStream file = File.Create(Application.persistentDataPath + "/ranking.bin");
+            ranking.winnersList.Add(player);
+            bf.Serialize(file, ranking);
+            file.Close();
+        }
+       
     }
 
     private void AddAdditionalPoints(List<Player> winners)
     {
         foreach (var winner in winners)
-        foreach (var field in _fields)
-            if (winner == field._assignment._player)
-                winner.ChangePoints(1);
+            foreach (var field in _fields)
+                if (field._assignment != null)
+                {
+                    if (winner == field._assignment._player)
+                        winner.ChangePoints(1);
+                }
+
     }
 
     private static string ResultStringForPlayersTie(List<Player> winners)
     {
         var result = winners.OrderByDescending(p => p.Points)
             .Where(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points);
-        string resultString = null;
-        foreach (var winner in result) resultString += " i " + winner.Nick;
+        string resultString = String.Empty;
+        foreach (var winner in result)
+        {
+            SaveDataForRanking(winner);
+            resultString += " i " + winner.Nick;
+        }
         return resultString;
     }
 
@@ -623,11 +665,11 @@ public class GameManager : MonoBehaviour
             _fields.Add(saveField);
         }
 
-        if(Sun_Rotation.Instance == null)
+        if (Sun_Rotation.Instance == null)
             PendingLoad.Add("sun_position", save.SunRotation);
         else
             Sun_Rotation.Instance.sun_position = save.SunRotation;
-          
+
         _round = save.round;
         _currentPlayerId = save.activePlayerId;
     }
