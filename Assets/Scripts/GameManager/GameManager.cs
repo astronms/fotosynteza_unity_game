@@ -627,10 +627,7 @@ public class GameManager : MonoBehaviour
             PendingLoad.Add("sun_position", save.SunRotation);
         else
             Sun_Rotation.Instance.sun_position = save.SunRotation;
-
-        if (MainGameUI.Instance != null)
-            _mainGameUI.refreshGameBoardTrees();
-
+          
         _round = save.round;
         _currentPlayerId = save.activePlayerId;
     }

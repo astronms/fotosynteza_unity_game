@@ -148,6 +148,7 @@ public class MainGameUI : MonoBehaviour
                 tree.transform.name = "Tree_" + fieldName.Split('_')[1];
                 break;
         }
+
         _gameManager.PlayerMadeMove();
     }
 
@@ -263,6 +264,10 @@ public class MainGameUI : MonoBehaviour
         strees_count.text = _gameManager._players[currentPlayer].NumberOfSmallTrees.ToString();
         mtrees_count.text = _gameManager._players[currentPlayer].NumberOfMediumTrees.ToString();
         ltrees_count.text = _gameManager._players[currentPlayer].NumberOfLargeTrees.ToString();
+
+        GameObject check = GameObject.Find("Board");
+        if (check != null)
+            refreshGameBoardTrees();
     }
 
     public void refreshGameBoardTrees()
@@ -273,7 +278,9 @@ public class MainGameUI : MonoBehaviour
             {
                 int idOwner = field._assignment._player.Id;
                 string fieldNameCoord = "[" + field._vector.x + ";" + field._vector.y + ";" + field._vector.z + "]";
+               // Debug.Log(fieldNameCoord);
                 GameObject visualField = GameObject.Find("Board/Field_" + fieldNameCoord);
+               // Debug.Log(visualField);
                 GameObject tree;
                 GameObject tmps;
                 switch (field._assignment._treeLevel)
@@ -286,6 +293,7 @@ public class MainGameUI : MonoBehaviour
                         break;
                     case TreeObject.TreeLvl.SMALL:
                         tmps = Resources.Load("SmallTree_Player_" + idOwner) as GameObject;
+                        //Debug.Log(visualField);
                         tree = Instantiate(tmps, visualField.transform.position, Quaternion.identity);
                         tree.transform.parent = _treesGroup.transform;
                         tree.transform.name = "Tree_" + fieldNameCoord;
