@@ -142,6 +142,20 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("_MAIN_SCENE");
     }
 
+    public void OpenRanking()
+    {
+
+        if (File.Exists(Application.persistentDataPath + "ranking"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "ranking", FileMode.Open);
+            //TODO: Read list
+        }
+        else
+        {
+            MessageBox.Show(" Zagraj w grę!","Ranking jeszcze nie istnieje");
+        }
+    }
     public void OpenTutorial()
     {
         Application.OpenURL("https://portalgames.blob.core.windows.net/fotosynteza/Fotosynteza-Instrukcja.pdf");
