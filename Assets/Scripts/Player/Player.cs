@@ -5,6 +5,7 @@ public class Player
 {
     public Player(int id, string nick, PlayerType playerType)
     {
+        Id = id;
         Nick = nick;
         PlayerType = playerType;
         Points = 0;
