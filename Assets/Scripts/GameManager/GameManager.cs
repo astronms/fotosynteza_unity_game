@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public int _currentPlayerId; //refers to the player who is currently taking his turn
 
     // zbiór pól
-    private List<Field> _fields = new List<Field>();
+    public List<Field> _fields = new List<Field>();
     private MainGameUI _mainGameUI;
 
     //players 
@@ -627,6 +627,10 @@ public class GameManager : MonoBehaviour
             PendingLoad.Add("sun_position", save.SunRotation);
         else
             Sun_Rotation.Instance.sun_position = save.SunRotation;
+
+        if (MainGameUI.Instance != null)
+            _mainGameUI.refreshGameBoardTrees();
+
         _round = save.round;
         _currentPlayerId = save.activePlayerId;
     }

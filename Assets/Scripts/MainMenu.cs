@@ -110,6 +110,18 @@ public class MainMenu : MonoBehaviour
             MessageBox.Show("Brak dostępnego zapisu do wczytania.", "Uwaga");
         else
         {
+            if (MainGameUI.Instance != null)
+            {
+                GameObject GameUI = GameObject.Find("GameUI");
+                Destroy(GameUI);
+            }
+            if (Sun_Rotation.Instance != null)
+            {
+                GameObject sun = GameObject.Find("sun");
+                Destroy(sun);
+            }
+
+            SceneManager.LoadSceneAsync("_MAIN_SCENE");
             LoadGame(save);
         }
     }

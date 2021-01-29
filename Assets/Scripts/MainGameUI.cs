@@ -34,6 +34,7 @@ public class MainGameUI : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);
         _gameManager.MainGameUIIsLoaded();
         _treesGroup = GameObject.Find("Trees");
+        refreshGameBoardTrees();
     }
 
     public void OpenMenu()
@@ -262,6 +263,48 @@ public class MainGameUI : MonoBehaviour
         strees_count.text = _gameManager._players[currentPlayer].NumberOfSmallTrees.ToString();
         mtrees_count.text = _gameManager._players[currentPlayer].NumberOfMediumTrees.ToString();
         ltrees_count.text = _gameManager._players[currentPlayer].NumberOfLargeTrees.ToString();
+    }
+
+    public void refreshGameBoardTrees()
+    { 
+        foreach(var field in _gameManager._fields)
+        {
+            if (field._assignment != null)
+            {
+                int idOwner = field._assignment._player.Id;
+                string fieldNameCoord = "[" + field._vector.x + ";" + field._vector.y + ";" + field._vector.z + "]";
+                GameObject visualField = GameObject.Find("Board/Field_" + fieldNameCoord);
+                GameObject tree;
+                GameObject tmps;
+                switch (field._assignment._treeLevel)
+                {
+                    case TreeObject.TreeLvl.SEED:
+                        tmps = Resources.Load("Seed_Player_" + idOwner) as GameObject;
+                        tree = Instantiate(tmps, visualField.transform.position, Quaternion.identity);
+                        tree.transform.parent = _treesGroup.transform;
+                        tree.transform.name = "Tree_" + fieldNameCoord;
+                        break;
+                    case TreeObject.TreeLvl.SMALL:
+                        tmps = Resources.Load("SmallTree_Player_" + idOwner) as GameObject;
+                        tree = Instantiate(tmps, visualField.transform.position, Quaternion.identity);
+                        tree.transform.parent = _treesGroup.transform;
+                        tree.transform.name = "Tree_" + fieldNameCoord;
+                        break;
+                    case TreeObject.TreeLvl.MID:
+                        tmps = Resources.Load("MediumTree_Player_" + idOwner) as GameObject;
+                        tree = Instantiate(tmps, visualField.transform.position, Quaternion.identity);
+                        tree.transform.parent = _treesGroup.transform;
+                        tree.transform.name = "Tree_" + fieldNameCoord;
+                        break;
+                    case TreeObject.TreeLvl.BIG:
+                        tmps = Resources.Load("BigTree_Player_" + idOwner) as GameObject;
+                        tree = Instantiate(tmps, visualField.transform.position, Quaternion.identity);
+                        tree.transform.parent = _treesGroup.transform;
+                        tree.transform.name = "Tree_" + fieldNameCoord;
+                        break;
+                }
+            }
+        }
     }
 
     private void Awake()
