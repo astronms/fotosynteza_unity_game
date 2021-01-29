@@ -271,8 +271,21 @@ public class MainGameUI : MonoBehaviour
     }
 
     public void refreshGameBoardTrees()
-    { 
-        foreach(var field in _gameManager._fields)
+    {
+        List<GameObject> allChildren = new List<GameObject>();
+
+        foreach (Transform child in _treesGroup.transform)
+        {
+            allChildren.Add(child.gameObject);
+        }
+
+        //Now destroy them
+        foreach (GameObject child in allChildren)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+
+        foreach (var field in _gameManager._fields)
         {
             if (field._assignment != null)
             {
