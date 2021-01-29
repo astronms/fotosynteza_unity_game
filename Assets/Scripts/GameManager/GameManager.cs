@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
 
-[System.Serializable]
+[Serializable]
 public class GameManager : MonoBehaviour
 {
     public int _currentPlayerId; //refers to the player who is currently taking his turn
@@ -42,7 +40,8 @@ public class GameManager : MonoBehaviour
         //Please do all other operations once MainGameUI object will be loaded, ie. in MainGameUIIsLoaded method. 
     }
 
-    public void MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
+    public void
+        MainGameUIIsLoaded() //This method is called when MainGameUI object has been created. It should be called only once. 
     {
         _mainGameUI = MainGameUI.Instance;
 
@@ -56,7 +55,6 @@ public class GameManager : MonoBehaviour
             field._vector = coordinate;
             _fields.Add(field);
         }
-
     }
 
     public void FazePhotosynthesis(int position)
@@ -314,7 +312,8 @@ public class GameManager : MonoBehaviour
 
     private int GetFieldLevel(Field field)
     {
-        int[] array = new int[3] { Math.Abs((field._vector.x) - 3), Math.Abs((field._vector.y) - 3), Math.Abs((field._vector.z) - 3) };
+        int[] array = new int[3]
+            {Math.Abs(field._vector.x - 3), Math.Abs(field._vector.y - 3), Math.Abs(field._vector.z - 3)};
         int max = array.Max();
         int value = 0;
 
@@ -336,6 +335,7 @@ public class GameManager : MonoBehaviour
                 value = 1;
                 break;
         }
+
         return value;
     }
 
@@ -355,7 +355,8 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0 && field._is_active[_currentPlayerId] == true)
+                if (_players[_currentPlayerId].NumberOfSeeds > 0 && _players[_currentPlayerId].PointOfLights > 0 &&
+                    field._is_active[_currentPlayerId])
                     return actionType.seed;
             }
 
@@ -436,6 +437,7 @@ public class GameManager : MonoBehaviour
                 _players[_currentPlayerId].ChangePointOfLights(-3);
                 break;
         }
+
         SetNeighborhoodToActive(field);
         return field._assignment._treeLevel;
     }
@@ -451,10 +453,8 @@ public class GameManager : MonoBehaviour
             field._already_used = true;
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     public void NextRound()
@@ -462,10 +462,7 @@ public class GameManager : MonoBehaviour
         FazePhotosynthesis(Sun_Rotation.Instance.sun_position);
         Sun_Rotation.Instance.Next_Sun_Position();
         _round++;
-        if (_round == 2)
-        {
-            FinalRound();
-        }
+        if (_round == 19) FinalRound();
         foreach (var field in _fields)
             field._already_used = false;
     }
@@ -501,8 +498,10 @@ public class GameManager : MonoBehaviour
             SaveDataForRanking(winners.OrderByDescending(p => p.Points).First());
             return winners.OrderByDescending(p => p.Points).First().Nick;
         }
+
         AddAdditionalPoints(winners);
-        if (winners.OrderByDescending(p => p.Points).Count(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points) > 1)
+        if (winners.OrderByDescending(p => p.Points)
+            .Count(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points) > 1)
             return ResultStringForPlayersTie(winners);
         SaveDataForRanking(winners.OrderByDescending(p => p.Points).First());
         return winners.OrderByDescending(p => p.Points).First().Nick;
@@ -531,31 +530,28 @@ public class GameManager : MonoBehaviour
             bf.Serialize(file, ranking);
             file.Close();
         }
-       
     }
 
     private void AddAdditionalPoints(List<Player> winners)
     {
         foreach (var winner in winners)
-            foreach (var field in _fields)
-                if (field._assignment != null)
-                {
-                    if (winner == field._assignment._player)
-                        winner.ChangePoints(1);
-                }
-
+        foreach (var field in _fields)
+            if (field._assignment != null)
+                if (winner == field._assignment._player)
+                    winner.ChangePoints(1);
     }
 
     private static string ResultStringForPlayersTie(List<Player> winners)
     {
         var result = winners.OrderByDescending(p => p.Points)
             .Where(p => p.Points == winners.OrderByDescending(w => w.Points).First().Points);
-        string resultString = String.Empty;
+        string resultString = string.Empty;
         foreach (var winner in result)
         {
             SaveDataForRanking(winner);
             resultString += " i " + winner.Nick;
         }
+
         return resultString;
     }
 
@@ -586,12 +582,12 @@ public class GameManager : MonoBehaviour
     private IEnumerable<Field> NeighborhoodFields(Field _field)
     {
         return _fields.Where(field =>
-            field._vector.x >= MinVal(_field._vector.x - (int)_field._assignment._treeLevel) &&
-            field._vector.x <= MaxVal(_field._vector.x + (int)_field._assignment._treeLevel) &&
-            field._vector.y >= MinVal(_field._vector.y - (int)_field._assignment._treeLevel) &&
-            field._vector.y <= MaxVal(_field._vector.y + (int)_field._assignment._treeLevel) &&
-            field._vector.z >= MinVal(_field._vector.z - (int)_field._assignment._treeLevel) &&
-            field._vector.z <= MaxVal(_field._vector.z + (int)_field._assignment._treeLevel));
+            field._vector.x >= MinVal(_field._vector.x - (int) _field._assignment._treeLevel) &&
+            field._vector.x <= MaxVal(_field._vector.x + (int) _field._assignment._treeLevel) &&
+            field._vector.y >= MinVal(_field._vector.y - (int) _field._assignment._treeLevel) &&
+            field._vector.y <= MaxVal(_field._vector.y + (int) _field._assignment._treeLevel) &&
+            field._vector.z >= MinVal(_field._vector.z - (int) _field._assignment._treeLevel) &&
+            field._vector.z <= MaxVal(_field._vector.z + (int) _field._assignment._treeLevel));
     }
 
     private void SetNeighborhoodToActive(Field _field)
@@ -625,18 +621,13 @@ public class GameManager : MonoBehaviour
     {
         return x <= 6 ? x : 6;
     }
+
     public Save CreateSaveGameObject()
     {
         Save save = new Save();
-        foreach (var player in _players)
-        {
-            save.activePlayers.Add(player);
-        }
+        foreach (var player in _players) save.activePlayers.Add(player);
 
-        foreach (var field in _fields)
-        {
-            save.activeFields.Add(field);
-        }
+        foreach (var field in _fields) save.activeFields.Add(field);
 
         save.round = _round;
         save.activePlayerId = _currentPlayerId;
@@ -650,20 +641,14 @@ public class GameManager : MonoBehaviour
         _fields.Clear();
         _currentPlayerId = 0;
         _round = 1;
-
     }
+
     public void LoadSaveGameObject(Save save)
     {
         ClearGame();
-        foreach (var savePlayer in save.activePlayers)
-        {
-            _players.Add(savePlayer);
-        }
+        foreach (var savePlayer in save.activePlayers) _players.Add(savePlayer);
 
-        foreach (var saveField in save.activeFields)
-        {
-            _fields.Add(saveField);
-        }
+        foreach (var saveField in save.activeFields) _fields.Add(saveField);
 
         if (Sun_Rotation.Instance == null)
             PendingLoad.Add("sun_position", save.SunRotation);
@@ -673,5 +658,4 @@ public class GameManager : MonoBehaviour
         _round = save.round;
         _currentPlayerId = save.activePlayerId;
     }
-
 }
