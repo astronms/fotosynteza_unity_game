@@ -55,24 +55,12 @@ public class MainGameUI : MonoBehaviour
 
         return coordinatesList;
     }
-    private void NewSeedInit(GameObject tmps, GameObject clickedField, string fieldName)
-    {
-        GameObject newSeed = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
-        newSeed.transform.parent = _treesGroup.transform;
-        newSeed.transform.name = "Tree_" + fieldName.Split('_')[1];
-    }
 
     public void SowSeed()
     {
-        var fieldName = GetFieldName(out var fieldCoordinates);
-
-        bool result = _gameManager.AddSeed(fieldCoordinates);
-
-        if (result)
+        string fieldName = GetFieldName(out var fieldCoordinates);
+        if (_gameManager.AddSeed(fieldCoordinates))
         {
-            GameObject clickedField = GameObject.Find("/Board/" + fieldName);
-            GameObject tmps = Resources.Load("Seed_Player_" + _gameManager._currentPlayerId) as GameObject;
-            NewSeedInit(tmps, clickedField, fieldName);
             _gameManager.PlayerMadeMove();
         }
         else
@@ -84,14 +72,9 @@ public class MainGameUI : MonoBehaviour
 
     public void PlantTree() //this method shoud be called only in first game round
     {
-        var fieldName = GetFieldName(out var fieldCoordinates);
-        bool result = _gameManager.PlantTree(fieldCoordinates);
-
-        if (result)
+        string fieldName = GetFieldName(out var fieldCoordinates);
+        if (_gameManager.PlantTree(fieldCoordinates))
         {
-            GameObject clickedField = GameObject.Find("/Board/" + fieldName);
-            GameObject tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId) as GameObject;
-            NewSeedInit(tmps, clickedField, fieldName);
             _gameManager.PlayerMadeMove();
         }
         else
@@ -101,54 +84,10 @@ public class MainGameUI : MonoBehaviour
         }
     }
 
-    private static string GetFieldName(out FieldVector fieldCoordinates)
-    {
-        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
-        fieldMenu.SetActive(false);
-
-        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
-        string fieldName = fieldNameHolder.GetComponent<Text>().text;
-        var tmp = fieldName.Split('[', ']')[1].Split(';');
-        fieldCoordinates = Field.GetCoordinates(tmp);
-        return fieldName;
-    }
-
-    private static void DestroyExistingTree(string fieldName)
-    {
-        GameObject existingTree = GameObject.Find("/Trees/Tree_" + fieldName.Split('_')[1]);
-        Destroy(existingTree);
-    }
-
     public void UpgradeTree()
     {
         string fieldName = GetFieldName(out var fieldCoordinates);
-        DestroyExistingTree(fieldName);
-        TreeObject.TreeLvl lvl = _gameManager.UpgradeTree(fieldCoordinates);
-        GameObject clickedField = GameObject.Find("/Board/" + fieldName);
-        GameObject tree;
-        GameObject tmps;
-        switch (lvl)
-        {
-            case TreeObject.TreeLvl.SMALL:
-                tmps = Resources.Load("SmallTree_Player_" + _gameManager._currentPlayerId) as GameObject;
-                tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
-                tree.transform.parent = _treesGroup.transform;
-                tree.transform.name = "Tree_" + fieldName.Split('_')[1];
-                break;
-            case TreeObject.TreeLvl.MID:
-                tmps = Resources.Load("MediumTree_Player_" + _gameManager._currentPlayerId) as GameObject;
-                tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
-                tree.transform.parent = _treesGroup.transform;
-                tree.transform.name = "Tree_" + fieldName.Split('_')[1];
-                break;
-            case TreeObject.TreeLvl.BIG:
-                tmps = Resources.Load("BigTree_Player_" + _gameManager._currentPlayerId) as GameObject;
-                tree = Instantiate(tmps, clickedField.transform.position, Quaternion.identity);
-                tree.transform.parent = _treesGroup.transform;
-                tree.transform.name = "Tree_" + fieldName.Split('_')[1];
-                break;
-        }
-
+        _gameManager.UpgradeTree(fieldCoordinates);
         _gameManager.PlayerMadeMove();
     }
 
@@ -156,10 +95,10 @@ public class MainGameUI : MonoBehaviour
 
     public void CutTree()
     {
-        var fieldName = GetFieldName(out var fieldCoordinates);
-        if ( _gameManager.CutTree(fieldCoordinates))
+        string fieldName = GetFieldName(out var fieldCoordinates);
+        if (_gameManager.CutTree(fieldCoordinates))
         {
-            DestroyExistingTree(fieldName);
+
             _gameManager.PlayerMadeMove();
         }
     }
@@ -291,9 +230,7 @@ public class MainGameUI : MonoBehaviour
             {
                 int idOwner = field._assignment._player.Id;
                 string fieldNameCoord = "[" + field._vector.x + ";" + field._vector.y + ";" + field._vector.z + "]";
-               // Debug.Log(fieldNameCoord);
                 GameObject visualField = GameObject.Find("Board/Field_" + fieldNameCoord);
-               // Debug.Log(visualField);
                 GameObject tree;
                 GameObject tmps;
                 switch (field._assignment._treeLevel)
@@ -306,7 +243,6 @@ public class MainGameUI : MonoBehaviour
                         break;
                     case TreeObject.TreeLvl.SMALL:
                         tmps = Resources.Load("SmallTree_Player_" + idOwner) as GameObject;
-                        //Debug.Log(visualField);
                         tree = Instantiate(tmps, visualField.transform.position, Quaternion.identity);
                         tree.transform.parent = _treesGroup.transform;
                         tree.transform.name = "Tree_" + fieldNameCoord;
@@ -326,6 +262,18 @@ public class MainGameUI : MonoBehaviour
                 }
             }
         }
+    }
+
+    private static string GetFieldName(out FieldVector fieldCoordinates)
+    {
+        GameObject fieldMenu = GameObject.Find("/GameUI/FieldMenu/Panel");
+        fieldMenu.SetActive(false);
+
+        GameObject fieldNameHolder = GameObject.Find("/GameUI/FieldMenu/Panel/FieldName");
+        string fieldName = fieldNameHolder.GetComponent<Text>().text;
+        var tmp = fieldName.Split('[', ']')[1].Split(';');
+        fieldCoordinates = Field.GetCoordinates(tmp);
+        return fieldName;
     }
 
     private void Awake()
